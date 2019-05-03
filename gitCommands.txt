@@ -2,11 +2,14 @@
 New machine: 
 git clone <url>
 
-To move changes to staging area
+To move changes to staging area:
 git add . 
 
-To accept changes locally 
+To accept changes locally:
 git commit -m "message" 
 
-To send changes to github for long term storage
+To send changes to github for long term storage:
 git push origin master
+
+To get the most recent version on github:
+git pull origin master

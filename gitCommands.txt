@@ -1,0 +1,12 @@
+
+New machine: 
+git clone <url>
+
+To move changes to staging area
+git add . 
+
+To accept changes locally 
+git commit -m "message" 
+
+To send changes to github for long term storage
+git push origin master

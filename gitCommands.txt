@@ -13,3 +13,7 @@ git push origin master
 
 To get the most recent version on github:
 git pull origin master
+
+
+To compile: 
+g++ -static -static-libgcc -static-libstdc++ a.cpp -o a.exe

@@ -18,7 +18,7 @@ Card :: Card(int number, unsigned suit)
 	else if(suit == HEARTS)   { suit_offset = 1; }
 	else if(suit == CLUBS)    { suit_offset = 2; }
 	else if(suit == SPADES  ) { suit_offset = 3; }
-	logicalID = number + 13*suit_offset;
+	logicalID = number + 13*suit_offset; // 13 cards per suit
 }
 
 void Card :: printCard()

@@ -1,8 +1,8 @@
 // Hand.cpp
 
 #include "Hand.h"
-#include <iostream>
 #include "sharedConstants.h"
+#include "Card.h" // included here for Card dependency 
 
 // Passing pointers is cheaper and easier (especially when we implement design patterns later)
 Hand :: Hand(Card *card0
@@ -26,7 +26,7 @@ int Hand :: countHand()
 void Hand :: printHand()
 {
 	int i;
-	for(i = 0; i < NUM_CARD_IN_HAND; i++){
+	for(i = 0; i < NUM_CARDS_IN_HAND; i++){
 		cardList[i]->printCard();
 	}
 }

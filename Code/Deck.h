@@ -1,15 +1,14 @@
 // Deck.h 
 
-#include <iostream>
-
 // Forward declare Card
 class Card;
 
 class Deck
 {
-public:
 	Card cardList[52];
+public:
 	Deck();
+	getCardsFromIndex();
 	void shuffle();
 	void printLogicalIDs();
 	void printDeck();

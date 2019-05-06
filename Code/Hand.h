@@ -1,12 +1,13 @@
 // Hand.h
 
-// Forward declare Card
-class Card;
+#include "SharedConstants.h"
+
+class Card; // Forward declaration is sufficient for header files
 
 
 class Hand
 {
-	Card* cardList[5];
+	Card* cardList[NUM_CARDS_IN_HAND];
 	
 public: 
 	Hand(Card *card0

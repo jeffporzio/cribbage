@@ -21,9 +21,24 @@ Card :: Card(int number, unsigned suit)
 	logicalID = number + 13*suit_offset; // 13 cards per suit
 }
 
+Card :: Card()
+{
+	// Dummy values to be set later?
+	number = -1;
+	value = -1;
+	logicalID = -1;
+	suit = 5; 
+}
+
+
 void Card :: printCard()
 {
 	cout << number << " of " << suit << "\t"; 
+}
+
+void Card :: printCardLogicalID()
+{
+	cout << logicalID;
 }
 
 bool Card :: operator==(const Card &other)

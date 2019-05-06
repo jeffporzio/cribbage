@@ -9,7 +9,9 @@ class Card
 	
 public: 
 	Card(int number, unsigned suit);
+	Card(); 
 	void printCard();
+	void printCardLogicalID();
 	// Overloaded operators
 	bool operator==(const Card &other);	
 };

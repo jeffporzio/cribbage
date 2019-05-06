@@ -5,9 +5,11 @@ class Card;
 
 class Deck
 {
-	Card cardList[52];
+	int size = 52;
+	cardList = Card[size];
 public:
 	Deck();
+	~Deck();
 	getCardsFromIndex();
 	void shuffle();
 	void printLogicalIDs();

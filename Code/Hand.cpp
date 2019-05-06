@@ -1,5 +1,6 @@
 // Hand.cpp
 
+#include <iostream>
 #include "Hand.h"
 #include "sharedConstants.h"
 #include "Card.h" // included here for Card dependency 
@@ -29,4 +30,5 @@ void Hand :: printHand()
 	for(i = 0; i < NUM_CARDS_IN_HAND; i++){
 		cardList[i]->printCard();
 	}
+	cout << "\n";
 }

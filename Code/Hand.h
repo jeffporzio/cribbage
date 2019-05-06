@@ -7,7 +7,7 @@ class Card; // Forward declaration is sufficient for header files
 
 class Hand
 {
-	Card* cardList[NUM_CARDS_IN_HAND];
+	Card* cardList[NUM_CARDS_IN_HAND]; // List of pointers to Cards
 	
 public: 
 	Hand(Card *card0

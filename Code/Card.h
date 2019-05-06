@@ -1,9 +1,5 @@
 //Card.h
 
-#include <iostream>
-#include "suitsEnum.h"
-#include "sharedConstants.h"
-
 class Card
 {
 	int number;

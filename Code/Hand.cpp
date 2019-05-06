@@ -1,6 +1,8 @@
 // Hand.cpp
 
 #include "Hand.h"
+#include <iostream>
+#include "sharedConstants.h"
 
 // Passing pointers is cheaper and easier (especially when we implement design patterns later)
 Hand :: Hand(Card *card0

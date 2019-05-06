@@ -1,12 +1,16 @@
 // Deck.h 
 
 #include <iostream>
-#include "sharedConstants.h"
 
 // Forward declare Card
 class Card;
 
 class Deck
 {
-	
+public:
+	Card cardList[52];
+	Deck();
+	void shuffle();
+	void printLogicalIDs();
+	void printDeck();
 };

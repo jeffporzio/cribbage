@@ -14,9 +14,9 @@ This file will no longer be updated.
 // Headers: 
 #include "suitsEnum.h"
 
-using namespace std;
+using namespace std; // Don't do this either.
 
-#define JACK 11
+#define JACK 11 // Don't do this, instead make a header declaring consts
 #define NUM_CARD_IN_HAND 5
 
 // Card class

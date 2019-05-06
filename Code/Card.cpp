@@ -1,6 +1,9 @@
 // Card.cpp
 
 #include "Card.h"
+#include <iostream>
+#include "suitsEnum"
+
 
 Card :: Card(int number, unsigned suit)
 {

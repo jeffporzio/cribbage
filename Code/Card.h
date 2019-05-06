@@ -1,7 +1,7 @@
 //Card.h
 
 #include <iostream>
-# include "suitsEnum.h"
+#include "suitsEnum.h"
 
 class Card
 {

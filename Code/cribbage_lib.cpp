@@ -1,5 +1,12 @@
 // cribbage_lib.cpp 
 
+/*
+This is now depreciated, since we want to not be scrub programers. 
+All of this functionality has been moved into various .h and .cpp files 
+for better maintainability and readability. 
+This file will no longer be updated.
+*/
+
 // Standard Libraries
 #include <iostream> 
 #include <new>
@@ -61,7 +68,7 @@ bool Card :: operator==(const Card &other)
 // Hand class
 class Hand
 {
-	Card cardList[5];
+	Card* cardList[5];
 	
 public: 
 	Hand(Card *card0
@@ -75,17 +82,18 @@ public:
 	double getExpectationValue();
 };
 
+// Passing pointers is cheaper and easier (especially when we implement design patterns later)
 Hand :: Hand(Card *card0
 			,Card *card1 
 			,Card *card2
 			,Card *card3
-			,Card *card4)
+			,Card *card4) 
 {
-	cardList[0] = *card0;
-	cardList[1] = *card1;
-	cardList[2] = *card2;
-	cardList[3] = *card3;
-	cardList[4] = *card4;
+	cardList[0] = card0;
+	cardList[1] = card1;
+	cardList[2] = card2;
+	cardList[3] = card3;
+	cardList[4] = card4;
 }
 
 int Hand :: countHand()
@@ -97,6 +105,11 @@ void Hand :: printHand()
 {
 	int i;
 	for(i = 0; i < NUM_CARD_IN_HAND; i++){
-		cardList[i].printCard();
+		cardList[i]->printCard();
 	}
+}
+
+int main()
+{
+	return 0;
 }

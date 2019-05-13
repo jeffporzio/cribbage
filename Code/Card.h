@@ -13,5 +13,5 @@ public:
 	void printCard();
 	void printCardLogicalID();
 	// Overloaded operators
-	bool operator==(const Card &other);	
+	bool operator==(Card other);	
 };

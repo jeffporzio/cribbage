@@ -2,7 +2,7 @@
 
 #include "Card.h"
 #include <iostream>
-#include "suitsEnum"
+#include "suitsEnum.h"
 
 
 Card :: Card(int number, unsigned suit)
@@ -41,7 +41,7 @@ void Card :: printCardLogicalID()
 	cout << logicalID;
 }
 
-bool Card :: operator==(const Card &other)
+bool Card :: operator==(Card other)
 {
 	if(this->logicalID == other.logicalID){
 		return true;

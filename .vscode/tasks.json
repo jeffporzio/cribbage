@@ -6,10 +6,13 @@
             "type": "shell",
             "command": "g++",
             "args": [
-                "-g",
+                "-static",
+                "-static-libgcc",
+                "-static-libstdc++",
+                "CribbageMain.cpp",
                 "-o",
-                "helloworld",
-                "helloworld.cpp"
+                "cribbage.exe"
+                
             ],
             "group": {
                 "kind": "build",

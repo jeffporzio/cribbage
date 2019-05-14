@@ -33,12 +33,12 @@ Card :: Card()
 
 void Card :: printCard()
 {
-	cout << number << " of " << suit << "\t"; 
+	std::cout << number << " of " << suit << "\t"; 
 }
 
 void Card :: printCardLogicalID()
 {
-	cout << logicalID;
+	std::cout << logicalID;
 }
 
 bool Card :: operator==(Card other)

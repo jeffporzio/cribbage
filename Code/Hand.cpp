@@ -30,5 +30,5 @@ void Hand :: printHand()
 	for(i = 0; i < NUM_CARDS_IN_HAND; i++){
 		cardList[i]->printCard();
 	}
-	cout << "\n";
+	std::cout << "\n";
 }

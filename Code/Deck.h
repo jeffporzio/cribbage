@@ -5,12 +5,12 @@ class Card;
 
 class Deck
 {
-	int size = 52;
-	cardList = Card[size];
+	static const int size = 52;
+	Card cardList[size];
 public:
 	Deck();
 	~Deck();
-	getCardsFromIndex();
+	// getCardsFromIndex();
 	void shuffle();
 	void printLogicalIDs();
 	void printDeck();

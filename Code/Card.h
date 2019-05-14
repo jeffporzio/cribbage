@@ -9,7 +9,7 @@ class Card
 	
 public: 
 	Card(int number, unsigned suit);
-	Card(); 
+	Card(); //parameterless constructor
 	void printCard();
 	void printCardLogicalID();
 	// Overloaded operators

@@ -17,7 +17,9 @@ Deck :: Deck()
 	int i = 0;
 	for(suit=0; suit<4; suit++){
 		for(number=0; number<13; number++){
-			cardList[i] = Card(number, suitsEnum[suit]); 
+			Card thisCard = new Card();
+			thisCard.initCard(number, suitsEnum[suit]);
+			cardList[i] = thisCard;
 			i++;
 		}
 	}

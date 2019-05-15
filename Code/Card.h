@@ -8,8 +8,8 @@ class Card
 	unsigned suit; 
 	
 public: 
-	Card(int number, unsigned suit);
 	Card(); //parameterless constructor
+	void initCard(int number, unsigned suit);
 	void printCard();
 	void printCardLogicalID();
 	// Overloaded operators

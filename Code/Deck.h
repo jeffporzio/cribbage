@@ -1,10 +1,10 @@
 // Deck.h 
 
-// Forward declare Card
-class Card;
+#include "Card.h"
 
 class Deck
 {
+private:
 	static const int size = 52;
 	Card cardList[size];
 public:

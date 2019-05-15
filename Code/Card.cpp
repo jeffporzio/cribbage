@@ -4,8 +4,16 @@
 #include <iostream>
 #include "suitsEnum.h"
 
+Card :: Card()
+{
+	// Dummy values to be set later?
+	number = -1;
+	value = -1;
+	logicalID = -1;
+	suit = 5; 
+}
 
-Card :: Card(int number, unsigned suit)
+void Card :: initCard(int number, unsigned suit)
 {
 	// Set the counting value
 	if(number >= 10) { value = 10; }
@@ -19,15 +27,6 @@ Card :: Card(int number, unsigned suit)
 	else if(suit == CLUBS)    { suit_offset = 2; }
 	else if(suit == SPADES  ) { suit_offset = 3; }
 	logicalID = number + 13*suit_offset; // 13 cards per suit
-}
-
-Card :: Card()
-{
-	// Dummy values to be set later?
-	number = -1;
-	value = -1;
-	logicalID = -1;
-	suit = 5; 
 }
 
 

@@ -1,6 +1,11 @@
 // Deck.h 
 
+
+#ifndef _deckToken_h
+#define _deckToken_h
+
 #include "Card.h"
+
 
 class Deck
 {
@@ -15,3 +20,6 @@ public:
 	void printLogicalIDs();
 	void printDeck();
 };
+
+
+#endif

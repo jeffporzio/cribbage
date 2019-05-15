@@ -1,7 +1,9 @@
 // Hand.h
 
-#include "SharedConstants.h"
+#ifndef _handToken_h
+#define _handToken_h
 
+#include "SharedConstants.h"
 class Card; // Forward declaration is sufficient for header files
 
 
@@ -20,3 +22,6 @@ public:
 	void printHand();
 	double getExpectationValue();
 };
+
+
+#endif

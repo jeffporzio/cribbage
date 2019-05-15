@@ -21,6 +21,7 @@ Deck :: Deck()
 			thisCard.initCard(number, suitsEnum[suit]);
 			cardList[i] = thisCard;
 			i++;
+			delete thisCard
 		}
 	}
 

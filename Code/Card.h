@@ -1,5 +1,8 @@
 //Card.h
 
+#ifndef _cardToken_h
+#define _cardToken_h
+
 class Card
 {
 	int number;
@@ -8,10 +11,12 @@ class Card
 	unsigned suit; 
 	
 public: 
-	Card(); //parameterless constructor
+	Card(); //Dong a constructor and an init function make builders and dependancy injection safer.
 	void initCard(int number, unsigned suit);
 	void printCard();
 	void printCardLogicalID();
 	// Overloaded operators
 	bool operator==(Card other);	
 };
+
+#endif

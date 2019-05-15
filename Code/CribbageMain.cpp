@@ -12,7 +12,7 @@ int main()
 	Deck deck;
 	Hand hand;
 
-	cout << "Stuff happened? \n"
+	std::cout << "Stuff happened? \n";
  
 	return 0;
 }

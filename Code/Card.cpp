@@ -13,7 +13,7 @@ Card :: Card()
 	suit = 5; 
 }
 
-void Card :: initCard(int number, unsigned suit)
+void Card :: initCard(int number, suitsEnum suit)
 {
 	// Set the counting value
 	if(number >= 10) { value = 10; }

@@ -6,7 +6,14 @@
 #include "Card.h" // included here for Card dependency 
 
 // Passing pointers is cheaper and easier (especially when we implement design patterns later)
-Hand :: Hand(Card *card0
+
+
+Hand :: Hand()
+{
+	Card *cardList[5]; 
+}
+
+void Hand :: dealHand(Card *card0
 			,Card *card1 
 			,Card *card2
 			,Card *card3

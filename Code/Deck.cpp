@@ -13,15 +13,13 @@ Deck :: Deck()
 	int numbers[13] = {1,2,3,4,5,6,7,8,9,10,11,12,13};
 	int suits[4] = {0,1,2,3};
 	
-	int number, suit;
 	int i = 0;
-	for(suit=0; suit<4; suit++){
-		for(number=0; number<13; number++){
-			Card thisCard = new Card();
-			thisCard.initCard(number, suitsEnum[suit]);
+	for(int suit=0; suit<4; suit++){
+		for(int number=0; number<13; number++){
+			Card thisCard;
+			thisCard.initCard(number, (suitsEnum) suit);
 			cardList[i] = thisCard;
 			i++;
-			delete thisCard
 		}
 	}
 

@@ -186,67 +186,77 @@ int Hand::getRunPoints()
 
 	for (int i = 0; i < NUM_CARDS_IN_HAND - 2; i++) {
 		num = number_list[i];
-		if (std::find(std::begin(number_list), std::end(number_list), num + 1) != std::end(number_list)){
+		if (std::find(std::begin(number_list), std::end(number_list), num + 1) != std::end(number_list)) {
 			temp += 1;
 		} else {
 			break;
 		}
 		if (std::find(std::begin(number_list), std::end(number_list), num + 2) != std::end(number_list)) {
 			temp += 1;
-		}
-		else {
+		} else {
 			break;
-		}		
+		}
 		if (std::find(std::begin(number_list), std::end(number_list), num + 3) != std::end(number_list)) {
 			temp += 1;
-		}
-		else {
+		} else {
 			break;
 		}
 		if (std::find(std::begin(number_list), std::end(number_list), num + 4) != std::end(number_list)) {
 			temp += 1;
-		}
-		else {
+		} else {
 			break;
 		}
 
 		if (temp <= 2) { temp = 0; }
-
 		if (temp > highest_order_run) { highest_order_run = temp; }
+	}
 
-		// Do we bother checkng for double and triple runs? 
-		if (highest_order_run == 0) { return 0; }
-		if (highest_order_run == 5) { return 5; }
+	// Do we bother checkng for double and triple runs? 
+	if (highest_order_run == 0) { return 0; }
+	if (highest_order_run == 5) { return 5; }
 
-		// Get the correct number of highest_order_run's 
-		std::vector<int> combo;
-		for (int i = 0; i < highest_order_run; i++) {
-			combo.push_back(0);	
+	// Get the correct number of highest_order_run's 
+	/*
+	std::vector<int> combos;
+	//for (int i = 0; i < highest_order_run; i++) {
+	//	combos.push_back(0);	
+	}
+	*/
+	std::vector<int> combo = std::vector<int>(highest_order_run);
+
+	// THIS ISN'T RIGHT YET
+	std::string bitmask(highest_order_run, 1); // K leading 1's
+	bitmask.resize(NUM_CARDS_IN_HAND, 0); // N-K trailing 0's
+	do {
+		int card_ind = 0;
+		for (int i = 0; i < NUM_CARDS_IN_HAND; ++i) {
+			if (bitmask[i]) {
+				combo[card_ind] = number_list[i];
+				card_ind++;
+			}
 		}
 
-		// THIS ISN'T RIGHT YET
-		std::string bitmask_2(2, 1); // K leading 1's
-		bitmask_2.resize(NUM_CARDS_IN_HAND, 0); // N-K trailing 0's
-		do {
-			int card_ind = 0;
-			for (int i = 0; i < NUM_CARDS_IN_HAND; ++i) {
-				if (bitmask_2[i]) {
-					two_card_combo[card_ind] = cardList[i];
-					card_ind++;
-				}
+		for (int j = 0; j < highest_order_run; j++) {
+			temp = 1;
+			num = combo[j];
+			if (std::find(std::begin(number_list), std::end(number_list), num + 1) != std::end(number_list)) {
+				temp += 1;
 			}
+			if (std::find(std::begin(number_list), std::end(number_list), num + 2) != std::end(number_list)) {
+				temp += 1;
+			}
+			if (std::find(std::begin(number_list), std::end(number_list), num + 3) != std::end(number_list)) {
+				temp += 1;
+			}
+			if (std::find(std::begin(number_list), std::end(number_list), num + 4) != std::end(number_list)) {
+				temp += 1;
+			}
+		}
 
-			// Pairs, Three/Four of a kind:
-			if (two_card_combo[0]->number == two_card_combo[1]->number) { score_pairs += 2; }
-			// Right Jack
-			if (two_card_combo[0]->number == JACK && two_card_combo[0]->suit == two_card_combo[1]->suit) { score_rightjack += 1; }
-			// 15s of 2
-			if (two_card_combo[0]->value + two_card_combo[1]->value == 15) { score_15s += 2; }
+		if (temp == highest_order_run) { run_points += highest_order_run; }
 
-		} while (std::prev_permutation(bitmask_2.begin(), bitmask_2.end()));
+	} while (std::prev_permutation(bitmask.begin(), bitmask.end()));
 
-
-	}
 
 	return run_points;
 }

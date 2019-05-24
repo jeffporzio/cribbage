@@ -10,29 +10,32 @@ Card :: Card()
 	number = -1;
 	value = -1;
 	logicalID = -1;
-	suit = 5; 
+	suit = -1; 
 }
 
-void Card :: initCard(int number, suitsEnum suit)
+void Card :: initCard(int num_in, suitsEnum suit_in)
 {
+	number = num_in;
+	suit = suit_in;
 	// Set the counting value
 	if(number >= 10) { value = 10; }
 	else {value = number;}
 
 	// LogicalID: 
 	int logicalID;
-	int suit_offset;
+	int suit_offset = -1;
 	if     (suit == DIAMONDS) { suit_offset = 0; }
 	else if(suit == HEARTS)   { suit_offset = 1; }
 	else if(suit == CLUBS)    { suit_offset = 2; }
 	else if(suit == SPADES  ) { suit_offset = 3; }
 	logicalID = number + 13*suit_offset; // 13 cards per suit
+
 }
 
 
 void Card :: printCard()
 {
-	std::cout << number << " of " << suit << "\t"; 
+	std::cout << number << " of " << suit << "\n"; 
 }
 
 void Card :: printCardLogicalID()
@@ -45,6 +48,16 @@ bool Card :: operator==(Card other)
 	if(this->logicalID == other.logicalID){
 		return true;
 	} else {
+		return false;
+	}
+}
+
+bool Card ::operator<(Card other)
+{
+	if (this->number < other.number) {
+		return true;
+	}
+	else {
 		return false;
 	}
 }

@@ -5,10 +5,11 @@
 
 #include "SharedConstants.h"
 #include "Card.h"
+#include <array>
 
 class Hand
 {
-	Card* cardList[NUM_CARDS_IN_HAND]; // List of pointers to Cards
+	std::array<Card*, 5> cardList; // List of pointers to Cards
 	
 public: 
 	Hand();
@@ -19,6 +20,8 @@ public:
 		,Card *card4);
 		 
 	int countHand();
+	int getRunPoints();
+	void rotateHand();
 	void printHand();
 	double getExpectationValue();
 };

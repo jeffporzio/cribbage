@@ -11,8 +11,8 @@ class Deck
 {
 private:
 	static const int size = 52;
-	Card cardList[size];
 public:
+	Card cardList[size];
 	Deck();
 	~Deck();
 	// getCardsFromIndex();

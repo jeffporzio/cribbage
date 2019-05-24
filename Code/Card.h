@@ -7,18 +7,19 @@
 
 class Card
 {
-	int number;
+public:
 	int value;
-	int logicalID; 
-	unsigned suit; 
-	
-public: 
-	Card(); //Dong a constructor and an init function make builders and dependancy injection safer.
+	int logicalID;  
+	int number;
+	unsigned suit;
+
+	Card(); //Doing a constructor and an init function make builders and dependancy injection safer.
 	void initCard(int number, suitsEnum suit);
 	void printCard();
 	void printCardLogicalID();
 	// Overloaded operators
-	bool operator==(Card other);	
+	bool operator==(Card other);
+	bool operator<(Card other);
 };
 
 #endif

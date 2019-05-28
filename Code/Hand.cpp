@@ -57,7 +57,7 @@ int Hand::countHand()
 		15s can be made of any number of cards, so need to check those each time.
 		-- Runs need to be checked separately.
 	*/
-	int score = 0; 
+	int score = 0;
 	int score_15s = 0;
 	int score_pairs = 0;
 	int score_flush = 0;
@@ -75,7 +75,7 @@ int Hand::countHand()
 	bitmask_2.resize(NUM_CARDS_IN_HAND, 0); // N-K trailing 0's
 	do {
 		int card_ind = 0;
-		for (int i = 0; i < NUM_CARDS_IN_HAND; ++i){
+		for (int i = 0; i < NUM_CARDS_IN_HAND; ++i) {
 			if (bitmask_2[i]) {
 				two_card_combo[card_ind] = cardList[i];
 				card_ind++;
@@ -83,11 +83,9 @@ int Hand::countHand()
 		}
 
 		// Pairs, Three/Four of a kind:
-		if(two_card_combo[0]->number == two_card_combo[1]->number) { score_pairs += 2; }
-		// Right Jack
-		if (two_card_combo[0]->number == JACK && two_card_combo[0]->suit == two_card_combo[1]->suit) { score_rightjack += 1; }
+		if (two_card_combo[0]->number == two_card_combo[1]->number) { score_pairs += 2; }
 		// 15s of 2
-		if (two_card_combo[0]->value + two_card_combo[1]->value == 15) { score_15s += 2;}
+		if (two_card_combo[0]->value + two_card_combo[1]->value == 15) { score_15s += 2; }
 
 	} while (std::prev_permutation(bitmask_2.begin(), bitmask_2.end()));
 
@@ -99,7 +97,7 @@ int Hand::countHand()
 	bitmask_3.resize(NUM_CARDS_IN_HAND, 0); // N-K trailing 0's
 	do {
 		int card_ind = 0;
-		for (int i = 0; i < NUM_CARDS_IN_HAND; ++i){
+		for (int i = 0; i < NUM_CARDS_IN_HAND; ++i) {
 			if (bitmask_3[i]) {
 				three_card_combo[card_ind] = cardList[i];
 				card_ind++;
@@ -119,7 +117,7 @@ int Hand::countHand()
 	bitmask_4.resize(NUM_CARDS_IN_HAND, 0); // N-K trailing 0's
 	do {
 		int card_ind = 0;
-		for (int i = 0; i < NUM_CARDS_IN_HAND; ++i){
+		for (int i = 0; i < NUM_CARDS_IN_HAND; ++i) {
 			if (bitmask_4[i]) {
 				four_card_combo[card_ind] = cardList[i];
 				card_ind++;
@@ -132,14 +130,19 @@ int Hand::countHand()
 	} while (std::prev_permutation(bitmask_4.begin(), bitmask_4.end()));
 
 	// 15s of 5
-	if(cardList[0]->value +
-		cardList[1]->value + 
-		cardList[2]->value + 
-		cardList[3]->value + 
+	if (cardList[0]->value +
+		cardList[1]->value +
+		cardList[2]->value +
+		cardList[3]->value +
 		cardList[4]->value == 15) {
 		score_15s += 2;
 	}
 
+	// Right Jack
+	for (int i = 0; i < 4; i++) {
+		if ((cardList[i]->number == JACK) && (cardList[i]->suit == cardList[4]->suit)) { score_rightjack += 1; }
+	}
+	if (score_rightjack > 1) { terminate; }
 
 	// In-Hand Flush
 	if (cardList[0]->suit == cardList[1]->suit &&
@@ -186,26 +189,24 @@ int Hand::getRunPoints()
 
 	for (int i = 0; i < NUM_CARDS_IN_HAND - 2; i++) {
 		num = number_list[i];
+		temp = 1;
 		if (std::find(std::begin(number_list), std::end(number_list), num + 1) != std::end(number_list)) {
 			temp += 1;
 		} else {
-			break;
+			continue;
 		}
 		if (std::find(std::begin(number_list), std::end(number_list), num + 2) != std::end(number_list)) {
 			temp += 1;
 		} else {
-			break;
+			continue;
 		}
 		if (std::find(std::begin(number_list), std::end(number_list), num + 3) != std::end(number_list)) {
 			temp += 1;
-		} else {
-			break;
-		}
+		} 
+
 		if (std::find(std::begin(number_list), std::end(number_list), num + 4) != std::end(number_list)) {
 			temp += 1;
-		} else {
-			break;
-		}
+		} 
 
 		if (temp <= 2) { temp = 0; }
 		if (temp > highest_order_run) { highest_order_run = temp; }
@@ -216,15 +217,8 @@ int Hand::getRunPoints()
 	if (highest_order_run == 5) { return 5; }
 
 	// Get the correct number of highest_order_run's 
-	/*
-	std::vector<int> combos;
-	//for (int i = 0; i < highest_order_run; i++) {
-	//	combos.push_back(0);	
-	}
-	*/
 	std::vector<int> combo = std::vector<int>(highest_order_run);
 
-	// THIS ISN'T RIGHT YET
 	std::string bitmask(highest_order_run, 1); // K leading 1's
 	bitmask.resize(NUM_CARDS_IN_HAND, 0); // N-K trailing 0's
 	do {

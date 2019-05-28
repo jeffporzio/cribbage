@@ -236,22 +236,18 @@ def getRunPoints(cardList):
 		if num+1 in numberList:
 			temp += 1
 		else: 
-			break # If it isn't, don't bother looking further 
+			continue # If it isn't, don't bother looking further 
 		
 		if num+2 in numberList:
 			temp += 1
 		else: 
-			break
+			continue
 			
 		if num+3 in numberList:
 			temp += 1	
-		else: 
-			break
 		
 		if num+4 in numberList: 
 			temp += 1	
-		else: 
-			break
 		
 		if temp <= 2: 
 			temp = 0
@@ -260,14 +256,16 @@ def getRunPoints(cardList):
 		if temp > HIGHEST_ORDER_RUN:
 			HIGHEST_ORDER_RUN = temp
 
+
+
 	# Do we bother checking for double and triple runs?
 	if HIGHEST_ORDER_RUN == 0:
 		# print 'No run!'
 		return 0 # Exit if no runs
 	if HIGHEST_ORDER_RUN == 5: 
 		return 5 # Don't bother searching for multiple runs of 5
-
-
+		
+		
 	
 	# Now allow for double, triple runs
 	hORC = itertools.combinations(numberList,HIGHEST_ORDER_RUN) #highestOrderRunCombos = hORC

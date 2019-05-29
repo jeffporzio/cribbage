@@ -142,7 +142,6 @@ int Hand::countHand()
 	for (int i = 0; i < 4; i++) {
 		if ((cardList[i]->number == JACK) && (cardList[i]->suit == cardList[4]->suit)) { score_rightjack += 1; }
 	}
-	if (score_rightjack > 1) { terminate; }
 
 	// In-Hand Flush
 	if (cardList[0]->suit == cardList[1]->suit &&
@@ -185,7 +184,7 @@ int Hand::getRunPoints()
 	int temp = 0; 
 	int highest_order_run = 0;
 	int num;
-	std::sort(number_list.begin(), number_list.end());
+	std::sort(number_list.begin(), number_list.end()); // Sort lets use ignore the two highest cards in the following loop.
 
 	for (int i = 0; i < NUM_CARDS_IN_HAND - 2; i++) {
 		num = number_list[i];
@@ -208,10 +207,11 @@ int Hand::getRunPoints()
 			temp += 1;
 		} 
 
-		if (temp <= 2) { temp = 0; }
 		if (temp > highest_order_run) { highest_order_run = temp; }
+
 	}
 
+	if (highest_order_run < 2) { highest_order_run = 0; }
 	// Do we bother checkng for double and triple runs? 
 	if (highest_order_run == 0) { return 0; }
 	if (highest_order_run == 5) { return 5; }

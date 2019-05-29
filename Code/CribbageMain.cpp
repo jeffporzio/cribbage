@@ -59,7 +59,9 @@ int main()
 		if(count % 10000 == 0) {
 			for (auto& x : cribbageDict) {
 				std::cout << x.first << '\t' << x.second << std::endl;
+				
 			}
+			std::cout << count << std::endl;
 			std::cout << std::endl;
 		}
 	} while (std::prev_permutation(bitmask.begin(), bitmask.end()));

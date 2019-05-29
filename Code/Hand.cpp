@@ -189,25 +189,38 @@ int Hand::getRunPoints()
 	for (int i = 0; i < NUM_CARDS_IN_HAND - 2; i++) {
 		num = number_list[i];
 		temp = 1;
+		// First two just kill it if we fail the check
 		if (std::find(std::begin(number_list), std::end(number_list), num + 1) != std::end(number_list)) {
 			temp += 1;
 		} else {
 			continue;
 		}
+		// First two just kill it if we fail the check
 		if (std::find(std::begin(number_list), std::end(number_list), num + 2) != std::end(number_list)) {
 			temp += 1;
 		} else {
 			continue;
 		}
+		// Now we could still have a run even if this fails
 		if (std::find(std::begin(number_list), std::end(number_list), num + 3) != std::end(number_list)) {
 			temp += 1;
-		} 
+		} else {
+			if (temp <= 2) { temp = 0; }
+			if (temp > highest_order_run) { highest_order_run = temp; }
+			continue;
+		}
 
 		if (std::find(std::begin(number_list), std::end(number_list), num + 4) != std::end(number_list)) {
 			temp += 1;
-		} 
+		}
+		else {
+			if (temp <= 2) { temp = 0; }
+			if (temp > highest_order_run) { highest_order_run = temp; }
+			continue;
+		}
 
 		if (temp > highest_order_run) { highest_order_run = temp; }
+		if (highest_order_run == 5) { break; } // No need to keep going
 
 	}
 
@@ -231,23 +244,40 @@ int Hand::getRunPoints()
 		}
 
 		for (int j = 0; j < highest_order_run; j++) {
+			// Similar logic here
 			temp = 1;
 			num = combo[j];
-			if (std::find(std::begin(number_list), std::end(number_list), num + 1) != std::end(number_list)) {
+
+			if (std::find(std::begin(combo), std::end(combo), num + 1) != std::end(combo)) {
 				temp += 1;
+			} else {
+				continue;
 			}
-			if (std::find(std::begin(number_list), std::end(number_list), num + 2) != std::end(number_list)) {
+
+			if (std::find(std::begin(combo), std::end(combo), num + 2) != std::end(combo)) {
 				temp += 1;
+			} else {
+				continue;
 			}
-			if (std::find(std::begin(number_list), std::end(number_list), num + 3) != std::end(number_list)) {
+
+			if (std::find(std::begin(combo), std::end(combo), num + 3) != std::end(combo)) {
 				temp += 1;
+			} else {
+				if (temp < 2) { temp = 0; }
+				if (temp == highest_order_run) { run_points += highest_order_run; }
+				continue;
 			}
-			if (std::find(std::begin(number_list), std::end(number_list), num + 4) != std::end(number_list)) {
+
+			if (std::find(std::begin(combo), std::end(combo), num + 4) != std::end(combo)) {
 				temp += 1;
+			} else {
+				if (temp < 2) { temp = 0; }
+				if (temp == highest_order_run) { run_points += highest_order_run; }
+				continue;
 			}
 		}
 
-		if (temp == highest_order_run) { run_points += highest_order_run; }
+		// If we make it this far it's a run of 5, which has already been caught.
 
 	} while (std::prev_permutation(bitmask.begin(), bitmask.end()));
 

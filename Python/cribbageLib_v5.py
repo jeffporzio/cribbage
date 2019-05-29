@@ -46,10 +46,6 @@ class Hand(object):
 		"""
 		self.CardList = cards
 	
-	def rotateHand(self):
-		temp = self.CardList.pop(0)
-		self.CardList.append(temp)
-	
 	#@profile
 	def countHand(self):
 		"""
@@ -234,7 +230,6 @@ def getRunPoints(cardList):
 	
 	HIGHEST_ORDER_RUN = 0
 	
-	#print "Hand: ", numberList
 	for i in range(0,len(numberList)-2): # No need to check the last two cards because no runs of 2
 		num = numberList[i]
 		temp = 1
@@ -250,37 +245,24 @@ def getRunPoints(cardList):
 			
 		if num+3 in numberList:
 			temp += 1	
-		else: 
-			temp = 0 if temp <= 2				
-			if temp > HIGHEST_ORDER_RUN:
-				HIGHEST_ORDER_RUN = temp
-			continue
 		
 		if num+4 in numberList: 
-			temp += 1
-		else: 
-			temp = 0 if temp <= 2 
-			if temp > HIGHEST_ORDER_RUN:
-				HIGHEST_ORDER_RUN = temp
-			continue
-			
-		temp = 0 if temp <= 2		
+			temp += 1	
+		
+		if temp <= 2: 
+			temp = 0
+		
 		#print 'temp: ', temp
 		if temp > HIGHEST_ORDER_RUN:
 			HIGHEST_ORDER_RUN = temp
-		
-		# Terminate loop if it's a run of 5.
-		if HIGHEST_ORDER_RUN == 5: 
-			break
 
 
-	#print 'highest_order_run: ', HIGHEST_ORDER_RUN
+
 	# Do we bother checking for double and triple runs?
 	if HIGHEST_ORDER_RUN == 0:
-		#print 'No run!'
+		# print 'No run!'
 		return 0 # Exit if no runs
 	if HIGHEST_ORDER_RUN == 5: 
-		#print 'Run of 5!'
 		return 5 # Don't bother searching for multiple runs of 5
 		
 		
@@ -290,41 +272,22 @@ def getRunPoints(cardList):
 	for combo in hORC:
 		for num in combo:
 			temp = 1
-			# First two just kill it if we fail the check
-			if num+1 in combo:
+			if num+1 in numberList:
 				temp += 1
-			else:
-				continue
-			# First two just kill it if we fail the check	
-			if num+2 in combo:
+			if num+2 in numberList:
 				temp += 1
-			else: 
-				continue
+			if num+3 in numberList:
+				temp += 1	
+			if num+4 in numberList: 
+				temp += 1	
+			if temp <= 2: 
+				temp = 0
 			
-			# From here on we could have a run even if this fails
-			if num+3 in combo:
-				temp += 1
-			else:
-				temp = 0 if temp <= 2		
-				#print 'temp: ', temp
-				if temp == HIGHEST_ORDER_RUN:
-					runPoints += HIGHEST_ORDER_RUN
-				continue
-				
-			if num+4 in combo: 
-				temp += 1
-			else:
-				temp = 0 if temp <= 2							
-				#print 'temp: ', temp
-				if temp == HIGHEST_ORDER_RUN:
-					runPoints += HIGHEST_ORDER_RUN
-				continue
-			
-			# If we make it all the way through, this is a run of 5
-			# Which we already checked for earlier. 
-			
-		#print combo			
-	#print 'Run points in getRunPoints(): ', runPoints, '\n'					
+			print 'temp: ', temp
+			if temp == HIGHEST_ORDER_RUN:
+				runPoints += HIGHEST_ORDER_RUN
+						
+	print 'Run points in getRunPoints(): ', runPoints					
 	return runPoints			
 	
 	

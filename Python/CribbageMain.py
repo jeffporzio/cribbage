@@ -31,8 +31,12 @@ def main():
 			hand.rotateHand()
 			count += 1
 			
+			if score == '19':
+				hand.pointBreakDown()
+			
 
-	print cribbageDict
-	
+	for key in cribbageDict:
+		print key, '\t:\t', cribbageDict[key]
+	print count
 	
 main()

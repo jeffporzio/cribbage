@@ -45,6 +45,26 @@ class Hand(object):
 		self.card5 = card5	
 		"""
 		self.CardList = cards
+		
+		self.score = 0
+		self.score_runs = 0 
+		self.score_15s = 0
+		self.score_pairs = 0
+		self.score_flushes = 0
+		self.score_rightJack = 0
+	
+	def rotateHand(self):
+		temp = self.CardList.pop(0)
+		self.CardList.append(temp)	
+		
+	def pointBreakDown(self):
+		self.printHand()
+		print 'Runs: ', self.score_runs
+		print '15s: ', self.score_15s
+		print 'Pairs: ', self.score_pairs
+		print 'Flushes: ', self.score_flushes
+		print 'RightJack: ', self.score_rightJack
+		print
 	
 	#@profile
 	def countHand(self):
@@ -70,11 +90,13 @@ class Hand(object):
 		for twoCardCombo in twoCardCombos:
 			if twoCardCombo[0].number == twoCardCombo[1].number:
 				points += 2
-		
+				self.score_pairs += 2
+				
 		# Right Jack
 		for card in self.CardList[0:4]:
 			if (card.number == JACK) and (card.suit == self.CardList[4].suit):
 				points += 1
+				self.score_rightJack += 1
 		
 		######################
 		# Three card points: #
@@ -93,55 +115,37 @@ class Hand(object):
 		 )
 		if isInHandFlush:
 			points += 4
+			self.score_flushes += 4
 			
 		#####################
 		# Five card points: #
 		#####################
 		# Add another point if the common card is the same suit as your flush		
 		if isInHandFlush and (self.CardList[0].suit == self.CardList[4].suit):
-			points += 1 
+			points += 1
+			self.score_flushes += 1
+		
 		
 		###########
 		# All 15s #
 		###########
-		"""
-		This section is slowing the code down. There are only
-		26 combos to go through. The slow part is the actual 
-		"card in combo" and total += card.value
-		"""
-		"""
-		for n in range(2,6):
-			combos = itertools.combinations(self.CardList,n)
-			for combo in combos:
-
-				total = 0
-				for card in combo:       # Here are the slow lines!
-					total += card.value  #
-				
-				total = sum([card.value for card in combo])
-
-				if total == 15:
-					points += 2
-		"""
 		valueList = [card.value for card in self.CardList]	
 		for n in range(2,6):
 			
-			combos = itertools.combinations(valueList,n)
-			
-			#for combo in combos:
-			#	total = sum(combo)
-			
-			# This is marginally faster than the other commented versions
+			combos = itertools.combinations(valueList,n)			
+			# This is marginally faster
 			for total in map(sum, combos):
 				if total == 15:
 					points += 2
+					self.score_15s += 2
 
 		#####################
 		# Runs of all kinds #
 		#####################
-		points += getRunPoints(self.CardList)
-	
-	
+		runPoints = getRunPoints(self.CardList)
+		points += runPoints
+		self.score_runs += runPoints
+		
 		return str(points)
 		
 		
@@ -221,73 +225,80 @@ def getRunPoints(cardList):
 	runPoints = 0
 
 	numberList = [o.number for o in cardList]
-	numberList.sort()
-	### This is messy but I think it works...
-	# Figure out what the highest length run is and use it to catch occurrences of smaller runs within 
-	# bigger runs.  It shouldn't be possible for there to be a run of 3 in a hand where there is also a
-	# run of 4, say. But I DO want to allow for double runs, which is why I need to do the combinations 
-	# a second time, but only looking for runs of length HIGHEST_ORDER_RUN
+
+	#print 'Hand: ', numberList
 	
-	HIGHEST_ORDER_RUN = 0
+	highest_order_run = 0
+	run_indexes = []
 	
-	for i in range(0,len(numberList)-2): # No need to check the last two cards because no runs of 2
-		num = numberList[i]
-		temp = 1
-		if num+1 in numberList:
-			temp += 1
-		else: 
-			continue # If it isn't, don't bother looking further 
+	# This array will contain the number of each card.number in the hand
+	"""
+	[1, 3, 4, 1, 2] = 
+	[2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	In order to more efficiently find highest_order_run
+	"""
+	count_number_arr = [0]*13
+	for number in numberList:
+		count_number_arr[number-1] += 1
 		
-		if num+2 in numberList:
+	temp = 1
+	# Need to prime this if there are any Aces.
+	if count_number_arr[0] > 0: 
+		temp_indexes = [0]
+	else: 
+		temp_indexes = []
+		
+	was_last_nonzero = False
+	for i in xrange(0,len(count_number_arr)):
+		if count_number_arr[i] > 0 and was_last_nonzero:
 			temp += 1
+			temp_indexes.append(i)
 		else: 
-			continue
+			# collect the temp before starting over from 1
+			if temp <= 2:
+				temp = 0 
+			if temp > highest_order_run: 
+				highest_order_run = temp
+				run_indexes = temp_indexes
+			# reset from 1 and reprime
+			temp = 1
+			temp_indexes = [i]
 			
-		if num+3 in numberList:
-			temp += 1	
-		
-		if num+4 in numberList: 
-			temp += 1	
-		
-		if temp <= 2: 
-			temp = 0
-		
-		#print 'temp: ', temp
-		if temp > HIGHEST_ORDER_RUN:
-			HIGHEST_ORDER_RUN = temp
+			if count_number_arr[i] > 0:
+				was_last_nonzero = True
+			else:
+				was_last_nonzero = False
+	else:
+		if temp <= 2:
+			temp = 0 
+		if len(temp_indexes) < 3:
+			temp_indexes = []
+	
+		if temp > highest_order_run: 
+			highest_order_run = temp
+			run_indexes = temp_indexes
 
-
+	#print "run_indexes: ", run_indexes
+	#print "highest_order_run: ", highest_order_run
 
 	# Do we bother checking for double and triple runs?
-	if HIGHEST_ORDER_RUN == 0:
-		# print 'No run!'
+	if highest_order_run == 0:
+		#print 'No run!'
 		return 0 # Exit if no runs
-	if HIGHEST_ORDER_RUN == 5: 
+	if highest_order_run == 5: 
+		#print 'Run of 5!'
 		return 5 # Don't bother searching for multiple runs of 5
-		
-		
-	
-	# Now allow for double, triple runs
-	hORC = itertools.combinations(numberList,HIGHEST_ORDER_RUN) #highestOrderRunCombos = hORC
-	for combo in hORC:
-		for num in combo:
-			temp = 1
-			if num+1 in numberList:
-				temp += 1
-			if num+2 in numberList:
-				temp += 1
-			if num+3 in numberList:
-				temp += 1	
-			if num+4 in numberList: 
-				temp += 1	
-			if temp <= 2: 
-				temp = 0
-			
-			print 'temp: ', temp
-			if temp == HIGHEST_ORDER_RUN:
-				runPoints += HIGHEST_ORDER_RUN
+
+	# Calculate the number of points including double/triple/quad runs
+	"""
+	runPoints = reduce((lambda x, y: count_number_arr[x] * count_number_arr[y]),
+							run_indexes) * highest_order_run
+	"""
+	runPoints = highest_order_run
+	for ind in run_indexes:
+		runPoints *= count_number_arr[ind]
 						
-	print 'Run points in getRunPoints(): ', runPoints					
+	#print 'Run points in getRunPoints(): ', runPoints					
 	return runPoints			
 	
 	

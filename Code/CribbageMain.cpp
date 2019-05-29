@@ -9,9 +9,13 @@
 #include <algorithm>
 #include <string>
 #include <map>
+#include <chrono>
 
 int main()
 {
+	
+	auto start = std::chrono::system_clock::now();
+	
 	Deck deck;
 	Hand hand;
 
@@ -69,6 +73,12 @@ int main()
 	for (auto& x : cribbageDict) {
 		std::cout << x.first << '\t' << x.second << std::endl; 
 	}
+
+
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = end - start;
+
+	std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 
 	return 0;
 }

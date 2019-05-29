@@ -251,7 +251,8 @@ def getRunPoints(cardList):
 		if num+3 in numberList:
 			temp += 1	
 		else: 
-			temp = 0 if temp <= 2				
+			if temp <= 2:
+				temo = 0
 			if temp > HIGHEST_ORDER_RUN:
 				HIGHEST_ORDER_RUN = temp
 			continue
@@ -259,13 +260,15 @@ def getRunPoints(cardList):
 		if num+4 in numberList: 
 			temp += 1
 		else: 
-			temp = 0 if temp <= 2 
+			if temp <= 2:
+				temp = 0
 			if temp > HIGHEST_ORDER_RUN:
 				HIGHEST_ORDER_RUN = temp
 			continue
 			
-		temp = 0 if temp <= 2		
-		#print 'temp: ', temp
+			if temp <= 2:
+				temp = 0
+			#print 'temp: ', temp
 		if temp > HIGHEST_ORDER_RUN:
 			HIGHEST_ORDER_RUN = temp
 		
@@ -305,7 +308,8 @@ def getRunPoints(cardList):
 			if num+3 in combo:
 				temp += 1
 			else:
-				temp = 0 if temp <= 2		
+				if temp <= 2:
+					temp = 0		
 				#print 'temp: ', temp
 				if temp == HIGHEST_ORDER_RUN:
 					runPoints += HIGHEST_ORDER_RUN
@@ -314,7 +318,8 @@ def getRunPoints(cardList):
 			if num+4 in combo: 
 				temp += 1
 			else:
-				temp = 0 if temp <= 2							
+				if temp <= 2:
+					temp = 0						
 				#print 'temp: ', temp
 				if temp == HIGHEST_ORDER_RUN:
 					runPoints += HIGHEST_ORDER_RUN

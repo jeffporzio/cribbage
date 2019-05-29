@@ -275,9 +275,10 @@ int Hand::getRunPoints()
 				if (temp == highest_order_run) { run_points += highest_order_run; }
 				continue;
 			}
+		
+			// If we make it this far it's a run of 5, which has already been caught.
+		
 		}
-
-		// If we make it this far it's a run of 5, which has already been caught.
 
 	} while (std::prev_permutation(bitmask.begin(), bitmask.end()));
 

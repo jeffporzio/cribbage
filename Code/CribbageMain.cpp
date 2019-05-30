@@ -10,8 +10,9 @@
 #include <string>
 #include <map>
 #include <chrono>
+#include <new>
 
-int main()
+int main_old()
 {
 	
 	auto start = std::chrono::system_clock::now();
@@ -38,8 +39,8 @@ int main()
 		{
 			// Using deck as a flyweight, make the cardList point to the 5 cards for this combo:
 			if (bitmask[i]) {
-				cardList[card_ind] = &deck.cardList[i];
-				card_ind++; 
+				
+				card_ind++; cardList[card_ind] = &deck.cardList[i];
 			}
 		}
 		// Now assemble and count the hand.
@@ -60,6 +61,7 @@ int main()
 		}
 
 		count++;
+		
 		if(count % 10000 == 0) {
 			for (auto& x : cribbageDict) {
 				std::cout << x.first << '\t' << x.second << std::endl;
@@ -82,3 +84,109 @@ int main()
 
 	return 0;
 }
+
+
+void printArray(int a[], int r) {
+
+	for (int i = 0; i < r; i++) {
+		std::cout << a[i] << ' ';
+
+	}
+	std::cout << std::endl;
+
+}
+
+int main() {
+
+	auto start = std::chrono::system_clock::now();
+
+	Deck deck;
+	Hand hand;
+
+	// a map mapping scores to multiplicities.
+	std::map<int, int> cribbageDict;
+
+	Card* cardList[5];
+	int score;
+	int count = 0;
+
+
+	int k = 5;
+	int N = 52;
+
+	int* index_combos = new int[k];
+	// initialize first combination
+	for (int i = 0; i < k; i++) {
+		index_combos[i] = i;
+	}
+	int i = k - 1; // Index to keep track of maximum unsaturated element in array
+	// a[0] can only be n-r+1 exactly once - our termination condition!
+	while (index_combos[0] < N - k + 1) {
+		// If outer elements are saturated, keep decrementing i till you find unsaturated element
+		while (i > 0 && index_combos[i] == N - k + i) {
+			i--;
+		}
+		
+		
+		/*************************************************************************************************/
+		// Main code goes here
+		
+		for (int j{}; j < 5; j++) {
+			cardList[j] = &deck.cardList[index_combos[j]];
+		}
+		hand.dealHand(cardList[0], cardList[1], cardList[2], cardList[3], cardList[4]);
+		for (int p = 0; p < 5; p++) {
+
+			//hand.printHand();
+			score = hand.countHand();
+			// Store the score
+			if (cribbageDict.count(score) > 0) {
+				cribbageDict[score] += 1;
+			}
+			else {
+				cribbageDict[score] = 1;
+			}
+			// Rotate the common card
+			hand.rotateHand();
+			count++;
+		}
+
+		
+		
+		if (count % 100000 == 0) {
+			for (auto& x : cribbageDict) {
+				std::cout << x.first << '\t' << x.second << std::endl;
+
+			}
+			std::cout << count << std::endl;
+			std::cout << std::endl;
+		}
+		
+
+		/*************************************************************************************************/
+		index_combos[i]++;
+		// Reset each outer element to prev element + 1
+		while (i < k - 1) {
+			index_combos[i + 1] = index_combos[i] + 1;
+			i++;
+		}
+	}
+
+	for (auto& x : cribbageDict) {
+		std::cout << x.first << '\t' << x.second << std::endl;
+	}
+	std::cout << count << std::endl;
+
+
+	auto end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = end - start;
+
+	std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
+
+
+	delete [] index_combos;
+
+	return 0;
+}
+
+

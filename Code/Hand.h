@@ -21,6 +21,7 @@ public:
 		 
 	int countHand();
 	int getRunPoints();
+	int getRunPoints_new();
 	void rotateHand();
 	void printHand();
 	double getExpectationValue();

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 
 class ComboGenerator{
 
@@ -16,8 +18,9 @@ private:
 	int N;
 	int k;
 	int i; 
-	int* current_combo; 
 	bool is_finished;
-	int* combo_to_return;
+	std::vector<int> current_combo;
+	std::vector<int> combo_to_return;
+
 
 };

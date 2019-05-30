@@ -1,12 +1,20 @@
 #include "ComboGenerator.h"
+#include <algorithm>
+#include <iostream>
+#include <new>
+#include <vector>
 
 ComboGenerator::ComboGenerator(int N, int k) {
 
 	this->N = N;
 	this->k = k;
 
-	int* current_combo = new int[k];
-	int* combo_to_return = new int[k];
+	for (int j = 0; j < k; j++) {
+		current_combo.pushback(0);
+		combo_to_return.pushback(0);
+	}
+
+
 
 	// initialize first combination
 	for (int i = 0; i < k; i++) {
@@ -38,7 +46,8 @@ int* ComboGenerator :: getNextCombo() {
 			i--;
 		}
 
-		combo_to_return = current_combo;
+		std::copy(current_combo.begin(), current_combo.end(),
+			std::back_inserter(combo_to_return));
 
 		current_combo[i]++;
 		// Reset each outer element to prev element + 1

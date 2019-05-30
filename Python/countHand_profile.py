@@ -1,4 +1,4 @@
-from cribbageLib_v3 import * 
+from cribbageLib_v5 import * 
 import matplotlib
 import matplotlib.pyplot as plt
 import time 

@@ -90,13 +90,13 @@ class Hand(object):
 		for twoCardCombo in twoCardCombos:
 			if twoCardCombo[0].number == twoCardCombo[1].number:
 				points += 2
-				self.score_pairs += 2
+				#self.score_pairs += 2
 				
 		# Right Jack
 		for card in self.CardList[0:4]:
 			if (card.number == JACK) and (card.suit == self.CardList[4].suit):
 				points += 1
-				self.score_rightJack += 1
+				#self.score_rightJack += 1
 		
 		######################
 		# Three card points: #
@@ -115,7 +115,7 @@ class Hand(object):
 		 )
 		if isInHandFlush:
 			points += 4
-			self.score_flushes += 4
+			#self.score_flushes += 4
 			
 		#####################
 		# Five card points: #
@@ -123,7 +123,7 @@ class Hand(object):
 		# Add another point if the common card is the same suit as your flush		
 		if isInHandFlush and (self.CardList[0].suit == self.CardList[4].suit):
 			points += 1
-			self.score_flushes += 1
+			#self.score_flushes += 1
 		
 		
 		###########
@@ -137,14 +137,14 @@ class Hand(object):
 			for total in map(sum, combos):
 				if total == 15:
 					points += 2
-					self.score_15s += 2
+					#self.score_15s += 2
 
 		#####################
 		# Runs of all kinds #
 		#####################
 		runPoints = getRunPoints(self.CardList)
 		points += runPoints
-		self.score_runs += runPoints
+		#self.score_runs += runPoints
 		
 		return str(points)
 		

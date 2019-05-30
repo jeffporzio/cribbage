@@ -1,10 +1,11 @@
-from cribbageLib_v4 import * 
+from cribbageLib_v4 import * #v4 takes 
+#from cribbageLib_v5 import * #v5 takes 
 #import matplotlib
 #import matplotlib.pyplot as plt
 import time 
 from timer_decorator import *
 
-@timer_this_func
+@timer_this_func_stats
 def main():
 	count = 0		
 	# A dictionary whose keys are the point values (Supposedly 0 through 29 excluding 19) and whose values are the number of hands that get you that many points. 

@@ -10,14 +10,14 @@ public:
 	~ComboGenerator();
 
 	bool isFinished();
-	int* getNextCombo();
+	std::vector<int> getNextCombo();
 	void restart();
 
 
 private: 
 	int N;
 	int k;
-	int i; 
+	int max_unsat; 
 	bool is_finished;
 	std::vector<int> current_combo;
 	std::vector<int> combo_to_return;

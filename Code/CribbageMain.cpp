@@ -5,6 +5,7 @@
 #include "Card.h"
 #include "sharedConstants.h"
 #include "suitsEnum.h"
+#include "ComboGenerator.h"
 #include <iostream>
 #include <algorithm>
 #include <string>
@@ -96,7 +97,7 @@ void printArray(int a[], int r) {
 
 }
 
-int main() {
+int main_good() {
 
 	auto start = std::chrono::system_clock::now();
 
@@ -190,3 +191,23 @@ int main() {
 }
 
 
+int main() {
+
+	int N = 5; 
+	int k = 4;
+	ComboGenerator comboGen = ComboGenerator(N,k);
+	std::vector<int> combo; 
+
+	while (!comboGen.isFinished()) {
+	
+		combo = comboGen.getNextCombo();
+		for (auto val : combo) {
+			std::cout << val << ' ';
+		}
+		std::cout << std::endl;
+	}
+
+
+
+	return 0;
+}

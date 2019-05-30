@@ -6,10 +6,13 @@ ComboGenerator::ComboGenerator(int N, int k) {
 	this->k = k;
 
 	int* current_combo = new int[k];
+	int* combo_to_return = new int[k];
+
 	// initialize first combination
 	for (int i = 0; i < k; i++) {
 		current_combo[i] = i;
 	}
+
 
 	int i = k - 1;
 
@@ -18,7 +21,8 @@ ComboGenerator::ComboGenerator(int N, int k) {
 }
 
 ComboGenerator :: ~ComboGenerator() {
-	delete current_combo;
+	delete [] current_combo;
+	delete [] combo_to_return;
 }
 
 bool ComboGenerator::isFinished() {
@@ -34,7 +38,7 @@ int* ComboGenerator :: getNextCombo() {
 			i--;
 		}
 
-		return current_combo; 
+		combo_to_return = current_combo;
 
 		current_combo[i]++;
 		// Reset each outer element to prev element + 1
@@ -45,6 +49,8 @@ int* ComboGenerator :: getNextCombo() {
 	} else {
 		is_finished = true;
 	}
+
+	return combo_to_return;
 
 
 }

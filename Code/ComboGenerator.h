@@ -18,5 +18,6 @@ private:
 	int i; 
 	int* current_combo; 
 	bool is_finished;
+	int* combo_to_return;
 
 };

@@ -4,6 +4,10 @@
 #include <new>
 #include <vector>
 
+/*
+https://dev.to/rrampage/algorithms-generating-combinations-100daysofcode-4o0a
+*/
+
 ComboGenerator::ComboGenerator(int N, int k) {
 
 	this->N = N;
@@ -43,8 +47,12 @@ std::vector<int> ComboGenerator :: getNextCombo() {
 			max_unsat--;
 		}
 
-		std::copy(current_combo.begin(), current_combo.end(), 
-				  combo_to_return.begin());
+		std::copy(current_combo.begin(), current_combo.end(), combo_to_return.begin());
+		/*
+		This is really slow. Going to make a combo class that is just 5 ints with functions to copy, etc 
+		Then use memcopy to just swap instances around, which will be the lowest level operation we can do. 
+		*/
+
 
 		current_combo[max_unsat]++;
 		// Reset each outer element to prev element + 1

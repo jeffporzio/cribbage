@@ -4,17 +4,24 @@
 #include "Hand.h"
 #include "sharedConstants.h"
 #include "Card.h" // included here for Card dependency 
+#include "ComboGenerator.h"
 #include <algorithm>
 #include <array>
 #include <vector>
+#include <new>
 
 // Passing pointers is cheaper and easier (especially when we implement design patterns later)
 
 
 Hand::Hand()
 {
-	Card* cardList[5];
+	// These will be NULL until hand.dealHand() is called for this instance.
+	for (unsigned i = 0; i < cardList.size(); i++) {
+		this->cardList[i] = NULL;
+	}
 }
+
+Hand::~Hand(){}
 
 void Hand::dealHand(Card* card0
 	, Card* card1
@@ -57,6 +64,8 @@ int Hand::countHand()
 		15s can be made of any number of cards, so need to check those each time.
 		-- Runs need to be checked separately.
 	*/
+
+	// Point containters
 	int score = 0;
 	int score_15s = 0;
 	int score_pairs = 0;
@@ -64,114 +73,70 @@ int Hand::countHand()
 	int score_runs = 0;
 	int score_rightjack = 0;
 
-	int N;
-	int k;
-	int i;
+	// ComboGenerators
+	ComboGenerator two_card_Gen = ComboGenerator(NUM_CARDS_IN_HAND, 2);
+	ComboGenerator three_card_Gen = ComboGenerator(NUM_CARDS_IN_HAND, 3);
+	ComboGenerator four_card_Gen = ComboGenerator(NUM_CARDS_IN_HAND, 4);
+	std::vector<int> two_card_index_combo;
+	std::vector<int> three_card_index_combo;	
+	std::vector<int> four_card_index_combo;
 
 	bool isInHandFlush = false;
 
 	//*****************************************
-	// Two card Combos: 5 choose 2
-	k = 2;
-	N = NUM_CARDS_IN_HAND;
-
-	int* two_card_combo = new int[k];
-	// initialize first combination
-	for (int i = 0; i < k; i++) {
-		two_card_combo[i] = i;
-	}
-	i = k - 1; // Index to keep track of maximum unsaturated element in array
-	// a[0] can only be n-r+1 exactly once - our termination condition!
-	while (two_card_combo[0] < N - k + 1) {
-		// If outer elements are saturated, keep decrementing i till you find unsaturated element
-		while (i > 0 && two_card_combo[i] == N - k + i) {
-			i--;
-		}
-		/*************************************************************************************************/
+	// Two card Combo
+	while (!two_card_Gen.isFinished())
+	{
+		two_card_index_combo = two_card_Gen.getNextCombo();
 		// Pairs, Three/Four of a kind:
-		if (cardList[two_card_combo[0]]->number == cardList[two_card_combo[1]]->number) { score_pairs += 2; }
+		if (cardList[two_card_index_combo[0]]->number == cardList[two_card_index_combo[1]]->number) { score_pairs += 2; }
 		// 15s of 2
-		if (cardList[two_card_combo[0]]->value + cardList[two_card_combo[1]]->value == 15) { score_15s += 2; }
-		/*************************************************************************************************/
-		two_card_combo[i]++;
-		// Reset each outer element to prev element + 1
-		while (i < k - 1) {
-			two_card_combo[i + 1] = two_card_combo[i] + 1;
-			i++;
-		}
+		if (cardList[two_card_index_combo[0]]->value + cardList[two_card_index_combo[1]]->value == 15) { score_15s += 2; }
 	}
 
 	//*****************************************
 	// Three card Combos: 5 choose 3
-	k = 3;
-	N = NUM_CARDS_IN_HAND;
-
-	int* three_card_combo = new int[k];
-	// initialize first combination
-	for (int i = 0; i < k; i++) {
-		three_card_combo[i] = i;
-	}
-	i = k - 1; // Index to keep track of maximum unsaturated element in array
-	// a[0] can only be n-r+1 exactly once - our termination condition!
-	while (three_card_combo[0] < N - k + 1) {
-		// If outer elements are saturated, keep decrementing i till you find unsaturated element
-		while (i > 0 && three_card_combo[i] == N - k + i) {
-			i--;
-		}
-		/*************************************************************************************************/
+	while (!three_card_Gen.isFinished()){
+		three_card_index_combo = three_card_Gen.getNextCombo();
 		// 15s of 3
-		if (cardList[three_card_combo[0]]->value + cardList[three_card_combo[1]]->value +
-			cardList[three_card_combo[2]]->value == 15) { score_15s += 2; }
-		/*************************************************************************************************/
-		three_card_combo[i]++;
-		// Reset each outer element to prev element + 1
-		while (i < k - 1) {
-			three_card_combo[i + 1] = three_card_combo[i] + 1;
-			i++;
+		if (cardList[three_card_index_combo[0]]->value + 
+			cardList[three_card_index_combo[1]]->value +
+			cardList[three_card_index_combo[2]]->value == 15) 
+		{ 
+			score_15s += 2; 
 		}
 	}
 
 	//*****************************************
-	// Four card Combos: 5 choose 4
-	k = 4;
-	N = NUM_CARDS_IN_HAND;
-
-	int* four_card_combo = new int[k];
-	// initialize first combination
-	for (int i = 0; i < k; i++) {
-		four_card_combo[i] = i;
-	}
-	i = k - 1; // Index to keep track of maximum unsaturated element in array
-	// a[0] can only be n-r+1 exactly once - our termination condition!
-	while (four_card_combo[0] < N - k + 1) {
-		// If outer elements are saturated, keep decrementing i till you find unsaturated element
-		while (i > 0 && four_card_combo[i] == N - k + i) {
-			i--;
-		}
-		/*************************************************************************************************/
+	// Four card combos: 5 choose 4:
+	while (!four_card_Gen.isFinished()){
+		
+		four_card_index_combo = four_card_Gen.getNextCombo();
 		// 15s of 4
-		if (cardList[four_card_combo[0]]->value + cardList[four_card_combo[1]]->value + 
-			cardList[four_card_combo[2]]->value + cardList[four_card_combo[3]]->value == 15) { score_15s += 2; }
-		/*************************************************************************************************/
-		four_card_combo[i]++;
-		// Reset each outer element to prev element + 1
-		while (i < k - 1) {
-			four_card_combo[i + 1] = four_card_combo[i] + 1;
-			i++;
+		if (cardList[four_card_index_combo[0]]->value + 
+			cardList[four_card_index_combo[1]]->value +
+			cardList[four_card_index_combo[2]]->value + 
+			cardList[four_card_index_combo[3]]->value == 15) 
+		{ 
+			score_15s += 2; 
 		}
+
 	}
 	// 15s of 5
 	if (cardList[0]->value +
 		cardList[1]->value +
 		cardList[2]->value +
 		cardList[3]->value +
-		cardList[4]->value == 15) {
+		cardList[4]->value == 15) 
+	{
 		score_15s += 2;
 	}
 
 	// Right Jack
 	for (int i = 0; i < 4; i++) {
-		if ((cardList[i]->number == JACK) && (cardList[i]->suit == cardList[4]->suit)) { 
+		if ((cardList[i]->number == JACK) && 
+			(cardList[i]->suit == cardList[4]->suit)) 
+		{ 
 			score_rightjack += 1;
 			break; // Can't be more than one.
 		}
@@ -189,21 +154,16 @@ int Hand::countHand()
 	if (isInHandFlush && cardList[0]->suit == cardList[4]->suit) { score_flush += 1; }
 
 	// Runs:
-	score_runs = this->getRunPoints_new();
+	score_runs = this->getRunPoints();
 
 
 	score = score_15s + score_flush + score_pairs + score_rightjack + score_runs;
-
-
-	delete [] two_card_combo;
-	delete [] three_card_combo;
-	delete [] four_card_combo;
 
 	return score;
 }
 
 
-int Hand::getRunPoints()
+int Hand::getRunPoints_old()
 {
 	std::array<int, NUM_CARDS_IN_HAND> number_list;
 	for (int i = 0; i < NUM_CARDS_IN_HAND; i++) {
@@ -332,7 +292,7 @@ int Hand::getRunPoints()
 }
 
 
-int Hand::getRunPoints_new() {
+int Hand::getRunPoints() {
 
 	std::array<int, NUM_CARDS_IN_HAND> number_list = { 0 };
 	for (int i = 0; i < NUM_CARDS_IN_HAND; i++) {
@@ -355,7 +315,7 @@ int Hand::getRunPoints_new() {
 	if (count_number_arr[0] > 0) { temp_indexes.push_back(0); }
 	int temp = 1;
 	bool was_last_nonzero = false; 
-	for (int i = 0; i < count_number_arr.size(); i++) {
+	for (unsigned i = 0; i < count_number_arr.size(); i++) {
 	
 		if (count_number_arr[i] > 0 && was_last_nonzero) {
 			temp += 1;

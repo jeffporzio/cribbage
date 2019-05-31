@@ -26,7 +26,7 @@ int main_old()
 
 	int N = 52;
 	int K = 5;
-	Card* cardList[5];
+	Card* cardList[5]; // Will be initialized in main loop
 	int score;
 	int count = 0;
 
@@ -41,7 +41,8 @@ int main_old()
 			// Using deck as a flyweight, make the cardList point to the 5 cards for this combo:
 			if (bitmask[i]) {
 				
-				card_ind++; cardList[card_ind] = &deck.cardList[i];
+				cardList[card_ind] = &deck.cardList[i];
+				card_ind++;
 			}
 		}
 		// Now assemble and count the hand.
@@ -86,7 +87,6 @@ int main_old()
 	return 0;
 }
 
-
 void printArray(int a[], int r) {
 
 	for (int i = 0; i < r; i++) {
@@ -97,12 +97,39 @@ void printArray(int a[], int r) {
 
 }
 
-int main_good() {
+int comboTester() {
+
+	int N = 5;
+	int k = 4;
+	ComboGenerator comboGen = ComboGenerator(N, k);
+	std::vector<int> combo;
+
+
+	for (int i = 0; i < 4; i++) {
+		while (!comboGen.isFinished()) {
+
+			combo = comboGen.getNextCombo();
+			for (auto val : combo) {
+				std::cout << val << ' ';
+			}
+			std::cout << std::endl;
+		}
+
+		comboGen.restart();
+		std::cout << std::endl;
+	}
+
+	return 0;
+
+}
+
+
+int main() {
 
 	auto start = std::chrono::system_clock::now();
 
-	Deck deck;
-	Hand hand;
+	Deck deck = Deck();
+	Hand hand = Hand();
 
 	// a map mapping scores to multiplicities.
 	std::map<int, int> cribbageDict;
@@ -111,32 +138,18 @@ int main_good() {
 	int score;
 	int count = 0;
 
+	ComboGenerator deckGen = ComboGenerator(NUM_CARDS_IN_DECK, NUM_CARDS_IN_HAND);
+	std::vector<int> index_combo;
 
-	int k = 5;
-	int N = 52;
+	while (!deckGen.isFinished()) {
 
-	int* index_combos = new int[k];
-	// initialize first combination
-	for (int i = 0; i < k; i++) {
-		index_combos[i] = i;
-	}
-	int i = k - 1; // Index to keep track of maximum unsaturated element in array
-	// a[0] can only be n-r+1 exactly once - our termination condition!
-	while (index_combos[0] < N - k + 1) {
-		// If outer elements are saturated, keep decrementing i till you find unsaturated element
-		while (i > 0 && index_combos[i] == N - k + i) {
-			i--;
+		index_combo = deckGen.getNextCombo();
+		for (int i = 0; i < 5; i++) {
+			cardList[i] = &deck.cardList[index_combo[i]];
 		}
-		
-		
-		/*************************************************************************************************/
-		// Main code goes here
-		
-		for (int j{}; j < 5; j++) {
-			cardList[j] = &deck.cardList[index_combos[j]];
-		}
+
 		hand.dealHand(cardList[0], cardList[1], cardList[2], cardList[3], cardList[4]);
-		for (int p = 0; p < 5; p++) {
+		for (int i = 0; i < 5; i++) {
 
 			//hand.printHand();
 			score = hand.countHand();
@@ -152,26 +165,13 @@ int main_good() {
 			count++;
 		}
 
-		
-		
-		if (count % 100000 == 0) {
-			for (auto& x : cribbageDict) {
-				std::cout << x.first << '\t' << x.second << std::endl;
-
-			}
-			std::cout << count << std::endl;
-			std::cout << std::endl;
-		}
-		
-
-		/*************************************************************************************************/
-		index_combos[i]++;
-		// Reset each outer element to prev element + 1
-		while (i < k - 1) {
-			index_combos[i + 1] = index_combos[i] + 1;
-			i++;
+		if (count > 10000) {
+			break;
 		}
 	}
+		
+		
+
 
 	for (auto& x : cribbageDict) {
 		std::cout << x.first << '\t' << x.second << std::endl;
@@ -185,29 +185,6 @@ int main_good() {
 	std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 
 
-	delete [] index_combos;
-
 	return 0;
 }
 
-
-int main() {
-
-	int N = 5; 
-	int k = 4;
-	ComboGenerator comboGen = ComboGenerator(N,k);
-	std::vector<int> combo; 
-
-	while (!comboGen.isFinished()) {
-	
-		combo = comboGen.getNextCombo();
-		for (auto val : combo) {
-			std::cout << val << ' ';
-		}
-		std::cout << std::endl;
-	}
-
-
-
-	return 0;
-}

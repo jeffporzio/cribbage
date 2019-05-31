@@ -13,6 +13,7 @@ class Hand
 	
 public: 
 	Hand();
+	~Hand();
 	void dealHand(Card *card0
 		,Card *card1 
 		,Card *card2
@@ -21,7 +22,7 @@ public:
 		 
 	int countHand();
 	int getRunPoints();
-	int getRunPoints_new();
+	int getRunPoints_old();
 	void rotateHand();
 	void printHand();
 	double getExpectationValue();

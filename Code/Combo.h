@@ -8,10 +8,9 @@ class Combo {
 public:
 	Combo(int size);
 	~Combo();
-	int& operator[](int i);
-	Combo operator=(Combo other);
+	int getIndex(unsigned i);
+	void setIndex(unsigned i, int val);
 	void clear();
 	int size;
-private:
-	std::array<int,5> indeces;
+	std::array<int, 5> indeces = { -1 };
 };

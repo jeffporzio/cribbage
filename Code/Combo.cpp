@@ -5,34 +5,26 @@
 
 
 Combo::Combo(int size) {
-	this->size = NUM_CARDS_IN_HAND; // These will all be the same size. It is up to the user not to read -1's.
-	for (int i = 0; i < size; i++) {
-		this->indeces[i] = -1;
+	this->size = size; // These will all be the same size. It is up to the user not to read -1's.
+	
+	std::cout << "From inside Combo::Combo(): " << std::endl;
+	for (auto& val : indeces) {
+		std::cout << val << " " << std::endl;
 	}
 }
 
 Combo::~Combo() {}
 
-int& Combo::operator[](int i) {
-	return this->indeces[i];
+int Combo::getIndex(unsigned i) {
+	return indeces[i];
 }
 
-Combo Combo::operator=(Combo other) {
-
-	if (this->indeces.size() == other.indeces.size()) {
-		for (int i = 0; i < this->size; i++) {
-			this->indeces[i] = other[i];
-		}
-	}
-	else {
-		std::cout << "Tried to compare two different size combos! \n Did not copy in Combo::operator=()";
-	}
-
-	return *this;
+void Combo::setIndex(unsigned i, int val) {
+	indeces[i] = val;
 }
 
 void Combo::clear() {
-	for (int i = 0; i < 5; i++) {
-		this->indeces[i] = -1;
+	for (int i = 0; i < size; i++) {
+		indeces[i] = -1;
 	}
 }

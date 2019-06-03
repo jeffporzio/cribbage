@@ -13,12 +13,12 @@ ComboGenerator::ComboGenerator(int N, int k) {
 	this->N = N;
 	this->k = k;
 
-	Combo current_combo = Combo(k); 
-	Combo combo_to_return = Combo(k);
+	this->current_combo   = new Combo(k); 
+	this->combo_to_return = new Combo(k);
 
 	// initialize first combination
 	for (int i = 0; i < k; i++) {
-		current_combo[i] = i;
+		current_combo->setIndex(i, i);
 	}
 
 	this->max_unsat = k - 1;
@@ -28,20 +28,21 @@ ComboGenerator::ComboGenerator(int N, int k) {
 }
 
 ComboGenerator :: ~ComboGenerator() {
-
+	delete current_combo;
+	delete combo_to_return;
 }
 
 bool ComboGenerator::isFinished() {
 	return this->is_finished;
 }
 
-Combo ComboGenerator :: getNextCombo() {
+Combo* ComboGenerator :: getNextCombo() {
 
 	// a[0] can only be n-r+1 exactly once - our termination condition!
 	// However, we lag behind one, so need to terminate one early.
-	if (current_combo[0] < N - k + 1) {
+	if (current_combo->getIndex(0) < N - k + 1) {
 		// If outer elements are saturated, keep decrementing i till you find unsaturated element
-		while (max_unsat > 0 && current_combo[max_unsat] == N - k + max_unsat) {
+		while (max_unsat > 0 && current_combo->getIndex(max_unsat) == N - k + max_unsat) {
 			max_unsat--;
 		}
 
@@ -50,18 +51,18 @@ Combo ComboGenerator :: getNextCombo() {
 		This is really slow. Going to make a combo class that is just 5 ints with functions to copy, etc 
 		Then use memcopy to just swap instances around, which will be the lowest level operation we can do. 
 		*/
-		memcpy(&combo_to_return, &current_combo, sizeof(current_combo)); // attempt to speed up the copy.
+		memcpy(combo_to_return, current_combo, sizeof(current_combo)); // attempt to speed up the copy.
 
-		current_combo[max_unsat]++;
+		current_combo->setIndex(max_unsat,max_unsat++);
 		// Reset each outer element to prev element + 1
 		while (max_unsat < k - 1) {
-			current_combo[max_unsat + 1] = current_combo[max_unsat] + 1;
+			current_combo->setIndex(max_unsat + 1, current_combo->getIndex(max_unsat) + 1);
 			max_unsat++;
 		}
 	} 
 	
 	// Check again to see if next iteration will be good.
-	if (current_combo[0] < N - k + 1) {
+	if (current_combo->getIndex(0) < N - k + 1) {
 		is_finished = false;
 	} else {
 		is_finished = true;
@@ -78,7 +79,7 @@ void ComboGenerator::restart() {
 
 	// initialize first combination
 	for (int i = 0; i < k; i++) {
-		current_combo[i] = i;
+		current_combo->setIndex(i, i);
 	}
 
 	max_unsat = k - 1;

@@ -77,9 +77,9 @@ int Hand::countHand()
 	ComboGenerator two_card_Gen = ComboGenerator(NUM_CARDS_IN_HAND, 2);
 	ComboGenerator three_card_Gen = ComboGenerator(NUM_CARDS_IN_HAND, 3);
 	ComboGenerator four_card_Gen = ComboGenerator(NUM_CARDS_IN_HAND, 4);
-	Combo two_card_index_combo = Combo(2);
-	Combo three_card_index_combo = Combo(3);	
-	Combo four_card_index_combo = Combo(4);
+	Combo* two_card_index_combo   = new Combo(2);
+	Combo* three_card_index_combo = new Combo(3);	
+	Combo* four_card_index_combo  = new Combo(4);
 
 	bool isInHandFlush = false;
 
@@ -89,9 +89,9 @@ int Hand::countHand()
 	{
 		two_card_index_combo = two_card_Gen.getNextCombo();
 		// Pairs, Three/Four of a kind:
-		if (cardList[two_card_index_combo[0]]->number == cardList[two_card_index_combo[1]]->number) { score_pairs += 2; }
+		if (cardList[two_card_index_combo->getIndex(0)]->number == cardList[two_card_index_combo->getIndex(1)]->number ) { score_pairs += 2; }
 		// 15s of 2
-		if (cardList[two_card_index_combo[0]]->value + cardList[two_card_index_combo[1]]->value == 15) { score_15s += 2; }
+		if ((cardList[two_card_index_combo->getIndex(0)]->value + cardList[two_card_index_combo->getIndex(1)]->value) == 15) { score_15s += 2; }
 	}
 
 	//*****************************************
@@ -99,9 +99,9 @@ int Hand::countHand()
 	while (!three_card_Gen.isFinished()){
 		three_card_index_combo = three_card_Gen.getNextCombo();
 		// 15s of 3
-		if (cardList[three_card_index_combo[0]]->value + 
-			cardList[three_card_index_combo[1]]->value +
-			cardList[three_card_index_combo[2]]->value == 15) 
+		if (cardList[three_card_index_combo->getIndex(0)]->value + 
+			cardList[three_card_index_combo->getIndex(1)]->value +
+			cardList[three_card_index_combo->getIndex(2)]->value == 15) 
 		{ 
 			score_15s += 2; 
 		}
@@ -113,10 +113,10 @@ int Hand::countHand()
 		
 		four_card_index_combo = four_card_Gen.getNextCombo();
 		// 15s of 4
-		if (cardList[four_card_index_combo[0]]->value + 
-			cardList[four_card_index_combo[1]]->value +
-			cardList[four_card_index_combo[2]]->value + 
-			cardList[four_card_index_combo[3]]->value == 15) 
+		if (cardList[four_card_index_combo->getIndex(0)]->value + 
+			cardList[four_card_index_combo->getIndex(1)]->value +
+			cardList[four_card_index_combo->getIndex(2)]->value + 
+			cardList[four_card_index_combo->getIndex(3)]->value == 15) 
 		{ 
 			score_15s += 2; 
 		}

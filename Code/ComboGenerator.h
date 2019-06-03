@@ -11,7 +11,7 @@ public:
 	~ComboGenerator();
 
 	bool isFinished();
-	Combo getNextCombo();
+	Combo* getNextCombo();
 	void restart();
 
 
@@ -20,8 +20,8 @@ private:
 	int k;
 	int max_unsat; 
 	bool is_finished;
-	Combo current_combo;
-	Combo combo_to_return;
+	Combo* current_combo;
+	Combo* combo_to_return;
 
 
 };

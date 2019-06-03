@@ -102,7 +102,7 @@ int comboTester() {
 	int N = 5;
 	int k = 4;
 	ComboGenerator comboGen = ComboGenerator(N, k);
-	Combo combo = Combo(k);
+	Combo* combo = new Combo(k);
 
 
 	for (int i = 0; i < 4; i++) {
@@ -110,7 +110,7 @@ int comboTester() {
 
 			combo = comboGen.getNextCombo();
 			for (int i = 0; i < NUM_CARDS_IN_HAND; i++) {
-				std::cout << combo[i] << ' ';
+				std::cout << combo->getIndex(i) << ' ';
 			}
 			std::cout << std::endl;
 		}
@@ -118,6 +118,9 @@ int comboTester() {
 		comboGen.restart();
 		std::cout << std::endl;
 	}
+
+	// Clean up
+	delete combo;
 
 	return 0;
 
@@ -139,13 +142,13 @@ int main() {
 	int count = 0;
 
 	ComboGenerator deckGen = ComboGenerator(NUM_CARDS_IN_DECK, NUM_CARDS_IN_HAND);
-	Combo index_combo = Combo(NUM_CARDS_IN_HAND);
+	Combo* index_combo = new Combo(NUM_CARDS_IN_HAND);
 
 	while (!deckGen.isFinished()) {
 
 		index_combo = deckGen.getNextCombo();
 		for (int i = 0; i < 5; i++) {
-			cardList[i] = &deck.cardList[index_combo[i]];
+			cardList[i] = &deck.cardList[index_combo->getIndex(i)];
 		}
 
 		hand.dealHand(cardList[0], cardList[1], cardList[2], cardList[3], cardList[4]);
@@ -184,6 +187,9 @@ int main() {
 
 	std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 
+
+	// Clean up
+	delete index_combo;
 
 	return 0;
 }

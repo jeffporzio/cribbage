@@ -13,10 +13,8 @@ ComboGenerator::ComboGenerator(int N, int k) {
 	this->N = N;
 	this->k = k;
 
-	for (int i = 0; i < k; i++) {
-		current_combo.push_back(0);
-		combo_to_return.push_back(0);
-	}
+	Combo current_combo = Combo(k); 
+	Combo combo_to_return = Combo(k);
 
 	// initialize first combination
 	for (int i = 0; i < k; i++) {
@@ -37,7 +35,7 @@ bool ComboGenerator::isFinished() {
 	return this->is_finished;
 }
 
-std::vector<int> ComboGenerator :: getNextCombo() {
+Combo ComboGenerator :: getNextCombo() {
 
 	// a[0] can only be n-r+1 exactly once - our termination condition!
 	// However, we lag behind one, so need to terminate one early.
@@ -47,12 +45,12 @@ std::vector<int> ComboGenerator :: getNextCombo() {
 			max_unsat--;
 		}
 
-		std::copy(current_combo.begin(), current_combo.end(), combo_to_return.begin());
+		//std::copy(current_combo.begin(), current_combo.end(), combo_to_return.begin());
 		/*
 		This is really slow. Going to make a combo class that is just 5 ints with functions to copy, etc 
 		Then use memcopy to just swap instances around, which will be the lowest level operation we can do. 
 		*/
-
+		memcpy(&combo_to_return, &current_combo, sizeof(current_combo)); // attempt to speed up the copy.
 
 		current_combo[max_unsat]++;
 		// Reset each outer element to prev element + 1

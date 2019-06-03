@@ -77,9 +77,9 @@ int Hand::countHand()
 	ComboGenerator two_card_Gen = ComboGenerator(NUM_CARDS_IN_HAND, 2);
 	ComboGenerator three_card_Gen = ComboGenerator(NUM_CARDS_IN_HAND, 3);
 	ComboGenerator four_card_Gen = ComboGenerator(NUM_CARDS_IN_HAND, 4);
-	std::vector<int> two_card_index_combo;
-	std::vector<int> three_card_index_combo;	
-	std::vector<int> four_card_index_combo;
+	Combo two_card_index_combo = Combo(2);
+	Combo three_card_index_combo = Combo(3);	
+	Combo four_card_index_combo = Combo(4);
 
 	bool isInHandFlush = false;
 

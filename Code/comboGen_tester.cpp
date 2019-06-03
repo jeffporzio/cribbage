@@ -17,15 +17,15 @@ int comboGen_tester() {
 	int N = 5;
 	int k = 4;
 	ComboGenerator comboGen = ComboGenerator(N, k);
-	std::vector<int> combo;
+	Combo combo = Combo(k);
 
 
 	for (int i = 0; i < 4; i++) {
 		while (!comboGen.isFinished()) {
 
 			combo = comboGen.getNextCombo();
-			for (auto val : combo) {
-				std::cout << val << ' ';
+			for (int i = 0; i < NUM_CARDS_IN_HAND; i++) {
+				std::cout << combo[i] << ' ';
 			}
 			std::cout << std::endl;
 		}

@@ -141,11 +141,11 @@ int main() {
 	int score;
 	int count = 0;
 
-	ComboGenerator deckGen = ComboGenerator(NUM_CARDS_IN_DECK, NUM_CARDS_IN_HAND);
+	ComboGenerator deckGen(NUM_CARDS_IN_DECK, NUM_CARDS_IN_HAND);
 	Combo* index_combo = new Combo(NUM_CARDS_IN_HAND);
 
 	while (!deckGen.isFinished()) {
-
+		//std::cout << "Count: " << count << std::endl;
 		index_combo = deckGen.getNextCombo();
 		for (int i = 0; i < 5; i++) {
 			cardList[i] = &deck.cardList[index_combo->getIndex(i)];
@@ -168,8 +168,16 @@ int main() {
 			count++;
 		}
 
-		if (count > 10000) {
-			break;
+		//std::cout << "Count: " << count << std::endl;
+		if (count % 250000 == 0) {
+			//break;
+			for (auto& x : cribbageDict) {
+				std::cout << x.first << '\t' << x.second << std::endl;
+			}
+			std::cout << count << std::endl;
+			std::cout << std::endl;
+			std::cout << std::endl;
+
 		}
 	}
 		
@@ -189,7 +197,7 @@ int main() {
 
 
 	// Clean up
-	delete index_combo;
+	// delete index_combo;
 
 	return 0;
 }

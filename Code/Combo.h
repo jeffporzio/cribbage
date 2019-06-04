@@ -12,5 +12,6 @@ public:
 	void setIndex(unsigned i, int val);
 	void clear();
 	int size;
-	std::array<int, 5> indeces = { -1 };
+	void printCombo();
+	std::array<int, 5> indeces = { -1,-1,-1,-1,-1 };
 };

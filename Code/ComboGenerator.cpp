@@ -27,6 +27,7 @@ ComboGenerator::ComboGenerator(int N, int k) {
 
 }
 
+
 ComboGenerator :: ~ComboGenerator() {
 	delete current_combo;
 	delete combo_to_return;
@@ -51,12 +52,14 @@ Combo* ComboGenerator :: getNextCombo() {
 		This is really slow. Going to make a combo class that is just 5 ints with functions to copy, etc 
 		Then use memcopy to just swap instances around, which will be the lowest level operation we can do. 
 		*/
-		memcpy(combo_to_return, current_combo, sizeof(current_combo)); // attempt to speed up the copy.
 
-		current_combo->setIndex(max_unsat,max_unsat++);
+		std::memcpy(combo_to_return, current_combo, sizeof(*current_combo)); // attempt to speed up the copy.
+
+
+		current_combo->setIndex(max_unsat,current_combo->getIndex(max_unsat)+1);
 		// Reset each outer element to prev element + 1
 		while (max_unsat < k - 1) {
-			current_combo->setIndex(max_unsat + 1, current_combo->getIndex(max_unsat) + 1);
+			current_combo->setIndex((max_unsat + 1), (current_combo->getIndex(max_unsat) + 1));
 			max_unsat++;
 		}
 	} 
@@ -65,6 +68,7 @@ Combo* ComboGenerator :: getNextCombo() {
 	if (current_combo->getIndex(0) < N - k + 1) {
 		is_finished = false;
 	} else {
+		//std::cout << "FINISHED!" << std::endl;
 		is_finished = true;
 
 	}

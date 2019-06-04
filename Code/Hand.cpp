@@ -9,6 +9,7 @@
 #include <array>
 #include <vector>
 #include <new>
+#include <string>
 
 // Passing pointers is cheaper and easier (especially when we implement design patterns later)
 
@@ -34,6 +35,36 @@ void Hand::dealHand(Card* card0
 	cardList[2] = card2;
 	cardList[3] = card3;
 	cardList[4] = card4;
+
+	this->updateHashString();
+}
+
+void Hand::updateHashString() {
+	this->hash_string = "";
+
+	std::string card_number;
+	std::string card_suit;
+	int number;
+	unsigned suit;
+
+	for (auto card : cardList) {
+		number = card->number;
+		suit = card->suit;
+		if (number < 10) {
+			card_number = std::to_string(number);
+		}
+		else if (number == 10) { card_number = "T"; }
+		else if (number == 11) { card_number = "J"; }
+		else if (number == 12) { card_number = "Q"; }
+		else if (number == 13) { card_number = "K"; }
+
+		if (suit == DIAMONDS) { card_suit = "D"; }
+		else if (suit == SPADES) { card_suit = "S"; }
+		else if (suit == CLUBS) { card_suit = "C"; }
+		else if (suit == HEARTS) { card_suit = "H"; }
+
+		this->hash_string += card_number + card_suit;
+	}
 }
 
 void Hand::printHand()
@@ -48,6 +79,7 @@ void Hand::printHand()
 void Hand::rotateHand()
 {
 	std::rotate(cardList.begin(), cardList.begin() + 1, cardList.end());
+	this->updateHashString();
 }
 
 int Hand::countHand()
@@ -373,4 +405,9 @@ int Hand::getRunPoints() {
 double Hand::getExpectationValue()
 {
 	return 0;
+}
+
+
+std::string Hand::getHashString() {
+	return this->hash_string;
 }

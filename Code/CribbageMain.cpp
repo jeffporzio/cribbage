@@ -166,9 +166,12 @@ int main() {
 			// Rotate the common card
 			hand.rotateHand();
 			count++;
+
+			std::cout << hand.getHashString() << " " << std::endl;
 		}
 
 		//std::cout << "Count: " << count << std::endl;
+		/*
 		if (count % 250000 == 0) {
 			//break;
 			for (auto& x : cribbageDict) {
@@ -179,7 +182,9 @@ int main() {
 			std::cout << std::endl;
 
 		}
+		*/	
 	}
+
 		
 		
 

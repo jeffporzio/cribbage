@@ -30,6 +30,9 @@ class Card(object):
 			
 	def printCard(self):		
 		print self.number, self.suit,
+		
+	def __cmp__(self, other):
+		return self.logicalID == other.logicalID
 
 		
 
@@ -45,11 +48,44 @@ class Hand(object):
 		self.card5 = card5	
 		"""
 		self.CardList = cards
+		#self.hash_string = ""
+		#self.updateHashString()
 	
 	def rotateHand(self):
 		temp = self.CardList.pop(0)
 		self.CardList.append(temp)
-	
+		#self.updateHashString()
+		
+	def updateHashString(self):
+		
+		self.hash_string = ""
+		for card in self.CardList:
+			number = card.number
+			suit = card.suit
+			if number < 10:
+				card_number = str(number)
+			elif number == 10:
+				card_number = 'T'
+			elif number == 11:
+				card_number = 'J'
+			elif number == 12:
+				card_number = 'Q'
+			elif number == 13:
+				card_number = 'K'
+				
+			if suit == "Diamonds":
+				card_suit = "D"
+			elif suit == "Hearts":
+				card_suit = "H"
+			elif suit == "Clubs":
+				card_suit = "C"
+			elif suit == "Spades":
+				card_suit = "S"
+				
+			self.hash_string += card_number + card_suit
+
+			
+				
 	#@profile
 	def countHand(self):
 		"""
@@ -199,7 +235,29 @@ class Hand(object):
 				
 			expectationList.append(EV)
 			
-		return max(expectationList)			
+		return max(expectationList)
+
+	def __eq__(self, other):
+		return [card.logicalID for card in self.CardList] == [card.logicalID for card in other.CardList]
+		
+	def __hash__(self):
+		# This can be tought of as a 5 digit base 52 number.
+		hash = 0
+		for i, card in enumerate(self.CardList):
+			hash += card.logicalID * 52**i # 
+			
+		return hash
+		
+		"""
+		return hash(
+					(self.CardList[0].number, self.CardList[0].suit,
+					 self.CardList[1].number, self.CardList[1].suit,
+					 self.CardList[2].number, self.CardList[2].suit,
+					 self.CardList[3].number, self.CardList[3].suit,
+					 self.CardList[4].number, self.CardList[4].suit,
+					)
+				   )	
+		"""
 		
 		
 		

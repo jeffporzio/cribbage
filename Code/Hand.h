@@ -6,10 +6,12 @@
 #include "SharedConstants.h"
 #include "Card.h"
 #include <array>
+#include <string>
 
 class Hand
 {
 	std::array<Card*, 5> cardList; // List of pointers to Cards
+	std::string hash_string;
 	
 public: 
 	Hand();
@@ -26,6 +28,8 @@ public:
 	void rotateHand();
 	void printHand();
 	double getExpectationValue();
+	std::string getHashString();
+	void updateHashString();
 };
 
 

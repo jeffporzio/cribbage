@@ -19,7 +19,7 @@ def constructLookUpDict():
 
 	deck = Deck()
 
-	look_up_dict = dict()
+	look_up_dict = {}
 	combo_gen = itertools.combinations(deck.CardList,5)
 
 	for combo in combo_gen:	
@@ -30,8 +30,8 @@ def constructLookUpDict():
 			
 			score = hand.countHand()
 			
-			#look_up_dict[hand.hash_string] = score
-			look_up_dict[hand] = score
+			look_up_dict[hand.hash_string] = score
+			#look_up_dict[hand] = score
 			
 			hand.rotateHand()
 			count += 1
@@ -73,13 +73,14 @@ def redoWithLookUp():
 		
 		for _ in xrange(0,5):
 			
-			#score = look_up_dict[hand.hash_string]
-			
+			score = look_up_dict[hand.hash_string]
+			"""
 			try: 
 				score = look_up_dict[hand]
 			except KeyError:
+				hand.printHand()
 				score = hand.countHand()
-
+			"""
 			if score in cribbageDict.keys():
 				cribbageDict[score] += 1 
 			else:

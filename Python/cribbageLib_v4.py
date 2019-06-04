@@ -48,13 +48,13 @@ class Hand(object):
 		self.card5 = card5	
 		"""
 		self.CardList = cards
-		#self.hash_string = ""
-		#self.updateHashString()
+		self.hash_string = ""
+		self.updateHashString()
 	
 	def rotateHand(self):
 		temp = self.CardList.pop(0)
 		self.CardList.append(temp)
-		#self.updateHashString()
+		self.updateHashString()
 		
 	def updateHashString(self):
 		
@@ -236,9 +236,16 @@ class Hand(object):
 			expectationList.append(EV)
 			
 		return max(expectationList)
-
+	
+	"""
+	# These didnt work and I don't know why.
 	def __eq__(self, other):
-		return [card.logicalID for card in self.CardList] == [card.logicalID for card in other.CardList]
+		return ( self.CardList[0].logicalID == other.CardList[0].logicalID and
+			     self.CardList[1].logicalID == other.CardList[1].logicalID and		
+			     self.CardList[2].logicalID == other.CardList[2].logicalID and		
+			     self.CardList[3].logicalID == other.CardList[3].logicalID and		
+			     self.CardList[4].logicalID == other.CardList[4].logicalID )	
+				
 		
 	def __hash__(self):
 		# This can be tought of as a 5 digit base 52 number.
@@ -247,8 +254,8 @@ class Hand(object):
 			hash += card.logicalID * 52**i # 
 			
 		return hash
-		
-		"""
+	"""
+	"""
 		return hash(
 					(self.CardList[0].number, self.CardList[0].suit,
 					 self.CardList[1].number, self.CardList[1].suit,
@@ -257,7 +264,7 @@ class Hand(object):
 					 self.CardList[4].number, self.CardList[4].suit,
 					)
 				   )	
-		"""
+	"""
 		
 		
 		

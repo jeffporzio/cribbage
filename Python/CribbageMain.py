@@ -1,5 +1,6 @@
 from cribbageLib_v4 import * #v4 takes 197 +/- 10 seconds
 #from cribbageLib_v5 import * #v5 takes 240 +/- 22 seconds
+from cribbageLib_v4_withLookUp import *
 #import matplotlib
 #import matplotlib.pyplot as plt
 import time 
@@ -18,6 +19,7 @@ def constructLookUpDict():
 	# A dictionary whose keys are the point values (Supposedly 0 through 29 excluding 19) and whose values are the number of hands that get you that many points. 
 
 	deck = Deck()
+	deck.printDeck()
 
 	look_up_dict = {}
 	combo_gen = itertools.combinations(deck.CardList,5)
@@ -53,7 +55,17 @@ def constructLookUpDict():
 def redoWithLookUp():
 	
 
-	look_up_dict = constructLookUpDict()
+	#look_up_dict = constructLookUpDict()
+	start = time.time()
+	print "Starting import..."
+	look_up_dict = {}
+	look_up_file = "cribbage_lookup_table.txt"
+	with open(look_up_file, 'r') as f: 
+		for line in f:
+			key, val = line.split(',')
+			look_up_dict[key] = int(val)
+	end = time.time()
+	print "Finished import after %f seconds." % (end-start)
 	
 	start = time.time()
 	

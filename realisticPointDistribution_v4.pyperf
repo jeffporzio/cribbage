@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<ProfilingTarget xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <StandaloneTarget>
+    <PythonInterpreter>
+      <Id>Global|PythonCore|2.7</Id>
+    </PythonInterpreter>
+    <WorkingDirectory>C:\Users\jporzio\On-Boarding\CribbageProject\Python</WorkingDirectory>
+    <Script>C:\Users\jporzio\On-Boarding\CribbageProject\Python\realisticPointDistribution_v4.py</Script>
+    <Arguments />
+  </StandaloneTarget>
+  <Reports>
+    <Report>
+      <Filename>C:\Users\jporzio\AppData\Local\Temp\realisticPointDistribution_v4_20190605.vsp</Filename>
+    </Report>
+  </Reports>
+  <UseVTune>false</UseVTune>
+</ProfilingTarget>

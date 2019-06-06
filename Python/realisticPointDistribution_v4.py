@@ -7,15 +7,31 @@ So for each 2.6M possible combinations of 5 cards, choose to discard the card th
 v = sum( prob of point value * point value) given the remaining 52-5 cards. 
 """
 import itertools
-from cribbageLib_v4 import * 
-import matplotlib
-import matplotlib.pyplot as plt
+from cribbageLib_v4_withLookUp import * 
+#from cribbageLib_v4 import * 
+#import matplotlib
+#import matplotlib.pyplot as plt
 import time 
 from timer_decorator import *
+#from populateLookUp import populateLookUp
 
 @timer_this_func
 def main():
+
+
+	start = time.time()
+	print "Starting import..."
+	look_up_dict = {}
+	look_up_file = "cribbage_lookup_table.txt"
+	with open(look_up_file, 'r') as f: 
+		for line in f:
+			key, val = line.split(',')
+			look_up_dict[key] = int(val)
+	end = time.time()
+	print "Finished import after %f seconds." % (end-start)
+			
 	count = 0		
+	checkpoint_num = 10000
 	# A dictionary whose keys are the point values (Supposedly 0 through 29 excluding 19) and whose values are the number of hands that get you that many points. 
 
 	deck = Deck()
@@ -24,17 +40,27 @@ def main():
 	cribbageDict = {}
 	combo_gen = itertools.combinations(deck.CardList,5)
 
+	start = time.time()
 	for combo in combo_gen:	
 		
-		hand = Hand(combo) # Take a list of card objects
+		hand = Hand(list(combo)) # Take a list of card objects
 		
-		if (count % 10000) == 0:
+		if (count % checkpoint_num) == 0 and count > 0:
 			localtime = time.asctime( time.localtime(time.time()) )
-			print '%i hands counted' % (count),
-			print ' at ', localtime
+			end = time.time()
+			delta_t = end - start
+
+			print '%i hands counted in %f secs. %f hands/sec' % (count, delta_t, checkpoint_num/delta_t)
+			
+			start = time.time()
 		
-		expectation_value = hand.getExpectationValue()
-		ev_rounded = int(10 * expectation_value) / 10.
+		#expectation_value = hand.getExpectationValue()
+		expectation_value = hand.getExpectationValue(look_up_dict)
+		
+		
+		#ev_rounded = int(10 * expectation_value) / 10.
+		ev_rounded = np.round(expectation_value)
+		
 		if ev_rounded in cribbageDict.keys():
 			cribbageDict[ev_rounded] += 1 
 		else:
@@ -42,10 +68,19 @@ def main():
 			
 		count += 1
 
-		if count > 10000:
-			break
+		#if count > 10000:
+		#    break
 	
 	print cribbageDict
+	
+	save_file = "realisticDist_v4_out_nearestPoint.txt"
+	with open(save_file, 'w') as f: 
+		for key in look_up_dict:
+			f.write(key + ',' + str(look_up_dict[key])+'\n')
+	
+	"""
+	with look-ups, calculating 10000 hands in about 30 seconds.
+	"""
 
 	
 	

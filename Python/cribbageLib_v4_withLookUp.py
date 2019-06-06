@@ -1,6 +1,6 @@
 import itertools
 import numpy as np
-from random import shuffle
+import random
 
 
 class Card(object):
@@ -31,8 +31,8 @@ class Card(object):
 	def printCard(self):		
 		print self.number, self.suit
 		
-	#def __eq__(self, other):
-	#	return self.logicalID == other.logicalID
+	def printLogicalID(self):
+		print self.logicalID,
 
 		
 
@@ -49,7 +49,15 @@ class Hand(object):
 		"""
 		self.CardList = cards
 		self.hash_string = ""
-		self.updateHashString()
+		
+		commonCardID = self.CardList[-1].logicalID
+		# Sort it by logicalID to insure lexigraphical order
+		self.CardList.sort(key = lambda card: card.logicalID)
+		# Rotate the hand so the drawCard is in the correct position.
+		while self.CardList[-1].logicalID != commonCardID: 
+			self.rotateHand()
+		else: 
+			self.updateHashString()
 	
 	def rotateHand(self):
 		temp = self.CardList.pop(0)
@@ -191,7 +199,13 @@ class Hand(object):
 			print '\t',
 		print
 			
-	def getExpectationValue(self):
+	def printLogicalIDs(self):
+		for card in self.CardList:
+			card.printLogicalID()
+			print '\t',
+		print
+			
+	def getExpectationValue(self, look_up_dict):
 		
 		# Create a deck to iterate through 
 		deck = Deck()
@@ -209,17 +223,29 @@ class Hand(object):
 			
 			# Go through each possible hand, store value/multiplicity in a dict
 			for drawCard in deck.CardList:
+			
 				
+				# Create the hand
 				possibleHand = Hand([combo[0],combo[1],combo[2],combo[3],drawCard])	
-		
-		
-				pointStr = possibleHand.countHand()
+
+				"""
+				The problem here is that when we loop through various drawCard's we 
+				end up ruining the lexigraphical order given by itertools.combinations. 
+				This means the first 4 cards in each hand could be in an order that 
+				doesn't appear in the look_up_dict, even though the hand exists. 
+				Solutions: 
+				- Better hash_string functiont to garuntee order. 
+				IMPLEMENTED - Better algorithm here to preserve lexigraphical order. 
+				"""
+
+				#pointStr = possibleHand.countHand()
+				pointStr = look_up_dict[possibleHand.hash_string]
 				
 				if pointStr in pointsDict.keys():
 					pointsDict[pointStr] += 1
 				else:
 					pointsDict[pointStr] = 1
-		
+	
 			EV = 0
 			for key, val in zip(pointsDict.keys(),pointsDict.values()):
 				EV += val * float(key) / len(deck.CardList)
@@ -227,7 +253,74 @@ class Hand(object):
 			expectationList.append(EV)
 			
 		return max(expectationList)
+
+	def chooseHands(self, look_up_dict):
+		
+		# Create a deck to iterate through 
+		deck = Deck()
+		# Remove the five cards in this hand from the deck		
+		
+		for card_in_hand in self.CardList:
+			deck.removeCardbyLogicalID(card_in_hand.logicalID)
+		
+		best_EV = 0
+		worst_EV = 100000
+		random_num = random.randint(0,4)
+		
+		# Create the five combinations of 4 cards 
+		fourCardCombos = itertools.combinations(self.CardList,4)
+		expectationList = []
+		count = 0
+		for combo in fourCardCombos:
+			
+			pointsDict = {}
+			
+			# Go through each possible hand, store value/multiplicity in a dict
+			for drawCard in deck.CardList:
+			
+				
+				# Create the hand
+				possibleHand = Hand([combo[0],combo[1],combo[2],combo[3],drawCard])	
+
+				"""
+				The problem here is that when we loop through various drawCard's we 
+				end up ruining the lexigraphical order given by itertools.combinations. 
+				This means the first 4 cards in each hand could be in an order that 
+				doesn't appear in the look_up_dict, even though the hand exists. 
+				Solutions: 
+				- Better hash_string functiont to garuntee order. 
+				IMPLEMENTED - Better algorithm here to preserve lexigraphical order. 
+				"""
+
+				#pointStr = possibleHand.countHand()
+				pointStr = look_up_dict[possibleHand.hash_string]
+				
+				if pointStr in pointsDict.keys():
+					pointsDict[pointStr] += 1
+				else:
+					pointsDict[pointStr] = 1
 	
+			EV = 0
+			for key, val in zip(pointsDict.keys(),pointsDict.values()):
+				EV += val * float(key) / len(deck.CardList)
+				
+			expectationList.append(EV)
+			
+			if EV > best_EV:
+				best_EV = EV
+				best_combo = combo
+				
+			if EV < worst_EV:
+				worst_EV = EV
+				worst_combo = combo
+				
+			if count == random_num:
+				random_combo = combo
+				
+			count += 1
+		
+		return (list(best_combo), list(worst_combo), list(random_combo))
+
 	"""
 	# These didnt work and I don't know why.
 	def __eq__(self, other):
@@ -270,7 +363,8 @@ class Deck(object):
 				self.CardList.append(card)
 				
 	def shuffle(self):
-		shuffle(self.CardList)
+		random.seed()
+		random.shuffle(self.CardList)
 		
 	def printLogicalIDs(self):
 		for card in self.CardList:

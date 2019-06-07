@@ -14,11 +14,18 @@ from timer_decorator import *
 #from populateLookUp import populateLookUp
 import random
 
+def fillDictWithZeros():
+	dict = {}
+	for i in range(0,30):
+		dict[i] = 1
+		
+	return dict
+
 @timer_this_func
 def main():
 
 	## MC Constants 
-	n_iter = int(5e6)
+	n_iter = int(1e2)
 
 	start = time.time()
 	print "Starting import..."
@@ -37,9 +44,11 @@ def main():
 
 	deck = Deck()
 	
-	best_dict = {}
-	worst_dict = {}
-	random_dict = {}
+	best_dict = fillDictWithZeros()
+	worst_dict = fillDictWithZeros()
+	random_dict = fillDictWithZeros()
+	
+
 
 	start = time.time()
 	for i in xrange(0,n_iter):	

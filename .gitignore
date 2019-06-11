@@ -1,0 +1,17 @@
+# Ignore Mac system files
+.DS_store
+
+# Ignore node_modules folder
+node_modules
+
+# Ignore all PDF files
+*.PDF
+
+# Ignore files related to API keys
+.env
+
+# Ignore SASS config files
+.sass-cache
+
+# Ignore look-up table. Need to compute locally. 
+Python\cribbage_look_up_table.txt

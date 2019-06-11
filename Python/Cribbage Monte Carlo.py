@@ -17,7 +17,7 @@ import random
 def fillDictWithZeros():
 	dict = {}
 	for i in range(0,30):
-		dict[i] = 1
+		dict[i] = 0
 		
 	return dict
 
@@ -25,7 +25,7 @@ def fillDictWithZeros():
 def main():
 
 	## MC Constants 
-	n_iter = int(1e2)
+	n_iter = int(1e6)
 
 	start = time.time()
 	print "Starting import..."

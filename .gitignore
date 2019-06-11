@@ -14,4 +14,5 @@ node_modules
 .sass-cache
 
 # Ignore look-up table. Need to compute locally. 
-Python/cribbage_look_up_table.txt
+Python/cribbage_lookup_table.txt
+Python/realisticDist_v4_out.txt

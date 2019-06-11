@@ -4,3 +4,4 @@
 # Ignore look-up table. Need to compute locally. 
 Python/cribbage_lookup_table.txt
 Python/realisticDist_v4_out.txt
+Python/realisticDist_v4_out_nearestPoint.txt

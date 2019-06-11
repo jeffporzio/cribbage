@@ -5,7 +5,7 @@
 node_modules
 
 # Ignore all PDF files
-*.PDF
+*.pdf
 
 # Ignore files related to API keys
 .env

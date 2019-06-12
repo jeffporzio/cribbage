@@ -7,4 +7,4 @@ Python/realisticDist_v4_out.txt
 Python/realisticDist_v4_out_nearestPoint.txt
 
 
-# git filter-branch --index-filter 'git rm -r --cached --ignore-unmatch Python/cribbage_lookup_table.txt' HEAD
+# git filter-branch --index-filter 'git rm -r --cached --ignore-unmatch Python/cribbage_lookup_table.txt' -f HEAD

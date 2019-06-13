@@ -49,12 +49,12 @@ class Hand(object):
 		"""
 		self.CardList = cards
 		self.hash_string = ""
-		self.updateHashString()
+		#self.updateHashString()
 	
 	def rotateHand(self):
 		temp = self.CardList.pop(0)
 		self.CardList.append(temp)
-		self.updateHashString()
+		#self.updateHashString()
 		
 	def updateHashString(self):
 		

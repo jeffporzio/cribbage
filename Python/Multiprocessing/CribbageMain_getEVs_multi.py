@@ -1,5 +1,5 @@
-from cribbageLib_v4_withLookUp_multi import *
-#from cribbageLib_v4_snakes import *
+#from cribbageLib_v4_withLookUp_multi import *
+from cribbageLib_v4_snakes import *
 import time 
 from timer_decorator_multi import *
 
@@ -15,31 +15,13 @@ is about 20 MB in RAM? Guesstimating a good size for a larger
 problem would be 50million. 
 """
 
-def getScoresOfHand(combo,look_up_dict):
+def getEVOfHand(combo):
 	hand = Hand(list(combo)) # Take a list of card objects
-	
-	scores = [0,0,0,0,0]
-	
-	for i in range(0,5):
-		
-		#scores[i] = hand.countHand()
-		score = look_up_dict[hand.hash_string]
-		
-		"""
-		if score in cribbageDict.keys():
-			cribbageDict[score] += 1 
-		else: 
-			cribbageDict[score] = 1
-		"""
-		
-		hand.rotateHand()
-	
-	return scores
-
+	return hand.getExpectationValue()
 
 if __name__ == "__main__":
 	
-	
+	"""
 	#look_up_dict = constructLookUpDict()
 	start = time.time()
 	print("Starting import...")
@@ -51,13 +33,11 @@ if __name__ == "__main__":
 			look_up_dict[key] = int(val)
 	end = time.time()
 	print("Finished import after %f seconds." % (end-start))
-	print("Size of look_up_dict: %i bytes"
-					%(sys.getsizeof(look_up_dict)))
-	
+	"""
 	start = time.time()		
 	
 	# Chunking variables
-	nProcs = 2 # (1: ~4GB,   2: 
+	nProcs = 4
 	chunk_size = 1000000
 	chunk_length_returned = chunk_size
 	"""
@@ -70,30 +50,24 @@ if __name__ == "__main__":
 	deck = Deck()
 	cribbageDict = {}
 	combo_gen = itertools.combinations(deck.CardList,5)
-	
-	# Create partial signature
-	partial_func = partial(getScoresOfHand, look_up_dict=look_up_dict)
-	
-	count = 0 
+
 	# Perform with max number of CPUs.
 	while chunk_length_returned > 0:
 		
 		# Take a chunk and do the work
 		chunk = itertools.islice(combo_gen, chunk_size)
 		with multiprocessing.Pool(nProcs) as pool:	
-			chunk_scores = pool.map(partial_func,chunk)			
-		chunk_length_returned = len(chunk_scores)
+			chunk_EVs = pool.map(getEVOfHand,chunk)			
+		chunk_length_returned = len(chunk_EVs)
 		
-		count += chunk_length_returned
-		print("Chunk finished. Counted: %i hands" %(count))
+		print("Size of chunk_scores in memory %i" %(sys.getsizeof(chunk_EVs)))
 		
 		# Save results from this chunk in the dict		
-		for scores in chunk_scores:
-			for score in scores: 
-				if score in cribbageDict.keys():
-					cribbageDict[score] += 1 
-				else:
-					cribbageDict[score] = 1
+		for EV in chunk_EVs: 
+			if EV in cribbageDict.keys():
+				cribbageDict[EV] += 1 
+			else:
+				cribbageDict[EV] = 1
 		
 		
 	for key in cribbageDict:

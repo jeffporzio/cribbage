@@ -225,7 +225,7 @@ class Hand(object):
 				EV += val * float(key) / len(deck.CardList)
 				
 			expectationList.append(EV)
-			
+		
 		return max(expectationList)
 	
 	"""

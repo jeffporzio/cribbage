@@ -56,7 +56,7 @@ if __name__ == "__main__":
 	start = time.time()		
 	
 	# Chunking variables
-	nProcs = 4 
+	nProcs = 8 # 4 on laptop, 8 on desktop (70 / 40, seconds respectively) 
 	chunk_size = 1000000
 	chunk_length_returned = chunk_size
 	"""

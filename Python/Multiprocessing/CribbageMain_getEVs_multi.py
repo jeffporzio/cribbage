@@ -21,23 +21,10 @@ def getEVOfHand(combo):
 
 if __name__ == "__main__":
 	
-	"""
-	#look_up_dict = constructLookUpDict()
-	start = time.time()
-	print("Starting import...")
-	look_up_dict = {}
-	look_up_file = "..\cribbage_lookup_table.txt"
-	with open(look_up_file, 'r') as f: 
-		for line in f:
-			key, val = line.split(',')
-			look_up_dict[key] = int(val)
-	end = time.time()
-	print("Finished import after %f seconds." % (end-start))
-	"""
 	start = time.time()		
 	
 	# Chunking variables
-	nProcs = 4
+	nProcs = 8 # ( 1: 107 minutes , 8: 28 minutes)
 	chunk_size = 1000000
 	chunk_length_returned = chunk_size
 	"""
@@ -60,14 +47,16 @@ if __name__ == "__main__":
 			chunk_EVs = pool.map(getEVOfHand,chunk)			
 		chunk_length_returned = len(chunk_EVs)
 		
-		print("Size of chunk_scores in memory %i" %(sys.getsizeof(chunk_EVs)))
+		count += chunk_length_returned
+		print("Chunk finished. Counted: %i hands" %(count))
 		
 		# Save results from this chunk in the dict		
 		for EV in chunk_EVs: 
-			if EV in cribbageDict.keys():
-				cribbageDict[EV] += 1 
+			ev_rounded = int(10 * expectation_value) / 10.
+			if ev_rounded in cribbageDict.keys():
+				cribbageDict[ev_rounded] += 1 
 			else:
-				cribbageDict[EV] = 1
+				cribbageDict[ev_rounded] = 1
 		
 		
 	for key in cribbageDict:

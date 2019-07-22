@@ -50,20 +50,19 @@ def CountScores(Scores, Totals):
 	max_score = 29
 	#Totals = np.zeros(30, dtype=np.int64)
 	
-	#the size of the sub-array that will be sorted by
+	#the size of the sub-array that will be counted within each GPU thread
 	chunk_size = 100000
 	
 	tpb = 32
 	#blocks per group
-	bpg =(Scores.size / (tpb - 1)) / (chunk_size-1) 
+	bpg =((Scores.size / tpb ) / chunk_size) + 1
 	
-	chunk_count = Scores.size / (chunk_size-1)
-	cr = Scores.size % (chunk_size-1)
-	tally_count = (30 * (chunk_count - 1)) + ( cr * 30)
+	chunk_count = (Scores.size / chunk_size) + 1
+	#cr = Scores.size % (chunk_size-1)
+	
 	#we need a separate tally list for each thread
-	#so we will reserve evert 30 contiguous cells in the array for each one
-	#since the total number of threads is equal to chunk_count, we use that as our multiplier
-	#to get the total number of items needed for the Tallies
+	#so we will reserve evert 30 contiguous cells in the array for each one of the threads
+	tally_count = (30* (chunk_count))
 	Tallies = np.zeros(tally_count, dtype=np.int64)
 	
 	countScores[bpg, tpb](Scores, Tallies, chunk_size, max_score)

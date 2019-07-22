@@ -64,7 +64,7 @@ def CalculateScoreOccurrence():
 	#threads per block
 	tpb = 1024
 	#blocks per group
-	bpg =(Cards.size / (tpb - 1))
+	bpg =(Cards.size / tpb )+1
 	
 	i =0
 	pc=0

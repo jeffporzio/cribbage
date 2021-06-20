@@ -48,7 +48,7 @@ def countScores(Scores, Tallies, chunk_size, max_score):
 def CountScores(Scores, Totals):
 	
 	max_score = 29
-	#Totals = np.zeros(30, dtype=np.int64)
+	# Totals = np.zeros(30, dtype=np.int64)
 	
 	#the size of the sub-array that will be counted within each GPU thread
 	chunk_size = 100000
